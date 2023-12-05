@@ -1,0 +1,2211 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.10 (Homebrew)
+-- Dumped by pg_dump version 14.10 (Homebrew)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.country (
+    c_name character varying NOT NULL,
+    c_cities character varying[],
+    c_langs character varying[],
+    c_capital character varying,
+    c_flag character varying
+);
+
+
+ALTER TABLE public.country OWNER TO ben;
+
+--
+-- Name: keeper; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.keeper (
+    k_id integer NOT NULL,
+    k_name character varying,
+    k_agent character varying,
+    k_dob date,
+    k_yellowcards integer,
+    k_redcards integer,
+    k_fouls integer,
+    k_interceptions integer,
+    k_height double precision,
+    k_weight double precision,
+    k_isavailable boolean,
+    k_passcompletion double precision,
+    k_salary double precision,
+    k_saves integer,
+    k_citizenof character varying,
+    k_team character varying
+);
+
+
+ALTER TABLE public.keeper OWNER TO ben;
+
+--
+-- Name: keeper_k_id_seq; Type: SEQUENCE; Schema: public; Owner: ben
+--
+
+CREATE SEQUENCE public.keeper_k_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.keeper_k_id_seq OWNER TO ben;
+
+--
+-- Name: keeper_k_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ben
+--
+
+ALTER SEQUENCE public.keeper_k_id_seq OWNED BY public.keeper.k_id;
+
+
+--
+-- Name: league; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.league (
+    l_name character varying NOT NULL,
+    l_officials character varying[],
+    l_country character varying
+);
+
+
+ALTER TABLE public.league OWNER TO ben;
+
+--
+-- Name: matches; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.matches (
+    m_id integer NOT NULL,
+    m_hometeam character varying,
+    m_awayteam character varying,
+    m_league character varying,
+    m_homegoals integer,
+    m_awaygoals integer,
+    m_date date
+);
+
+
+ALTER TABLE public.matches OWNER TO ben;
+
+--
+-- Name: matches_m_id_seq; Type: SEQUENCE; Schema: public; Owner: ben
+--
+
+CREATE SEQUENCE public.matches_m_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.matches_m_id_seq OWNER TO ben;
+
+--
+-- Name: matches_m_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ben
+--
+
+ALTER SEQUENCE public.matches_m_id_seq OWNED BY public.matches.m_id;
+
+
+--
+-- Name: player; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.player (
+    p_id integer NOT NULL,
+    p_name character varying,
+    p_agent character varying,
+    p_dob date,
+    p_yellowcards integer,
+    p_redcards integer,
+    p_position character varying,
+    p_fouls integer,
+    p_interceptions integer,
+    p_height double precision,
+    p_weight double precision,
+    p_isavailable boolean,
+    p_passcompletion double precision,
+    p_salary double precision,
+    p_citizenof character varying,
+    p_team character varying,
+    p_goalsscored integer DEFAULT 0
+);
+
+
+ALTER TABLE public.player OWNER TO ben;
+
+--
+-- Name: player_p_id_seq; Type: SEQUENCE; Schema: public; Owner: ben
+--
+
+CREATE SEQUENCE public.player_p_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.player_p_id_seq OWNER TO ben;
+
+--
+-- Name: player_p_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ben
+--
+
+ALTER SEQUENCE public.player_p_id_seq OWNED BY public.player.p_id;
+
+
+--
+-- Name: staff; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.staff (
+    s_id integer NOT NULL,
+    s_name character varying,
+    s_team character varying,
+    s_citizenof character varying,
+    s_salary double precision,
+    s_role character varying
+);
+
+
+ALTER TABLE public.staff OWNER TO ben;
+
+--
+-- Name: staff_s_id_seq; Type: SEQUENCE; Schema: public; Owner: ben
+--
+
+CREATE SEQUENCE public.staff_s_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.staff_s_id_seq OWNER TO ben;
+
+--
+-- Name: staff_s_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ben
+--
+
+ALTER SEQUENCE public.staff_s_id_seq OWNED BY public.staff.s_id;
+
+
+--
+-- Name: team; Type: TABLE; Schema: public; Owner: ben
+--
+
+CREATE TABLE public.team (
+    t_name character varying NOT NULL,
+    t_transferbudget double precision,
+    t_passes double precision,
+    t_goalsconceded integer,
+    t_goalsscored integer,
+    t_league character varying,
+    t_possesion double precision
+);
+
+
+ALTER TABLE public.team OWNER TO ben;
+
+--
+-- Name: keeper k_id; Type: DEFAULT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.keeper ALTER COLUMN k_id SET DEFAULT nextval('public.keeper_k_id_seq'::regclass);
+
+
+--
+-- Name: matches m_id; Type: DEFAULT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.matches ALTER COLUMN m_id SET DEFAULT nextval('public.matches_m_id_seq'::regclass);
+
+
+--
+-- Name: player p_id; Type: DEFAULT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.player ALTER COLUMN p_id SET DEFAULT nextval('public.player_p_id_seq'::regclass);
+
+
+--
+-- Name: staff s_id; Type: DEFAULT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.staff ALTER COLUMN s_id SET DEFAULT nextval('public.staff_s_id_seq'::regclass);
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.country (c_name, c_cities, c_langs, c_capital, c_flag) FROM stdin;
+France	{Paris,Lyon,Marseille}	{French}	Paris	path/to/french_flag.jpg
+Germany	{Berlin,Munich,Hamburg}	{German}	Berlin	path/to/german_flag.jpg
+Japan	{Tokyo,Kyoto,Osaka}	{Japanese}	Tokyo	path/to/japanese_flag.jpg
+Brazil	{Brasília,"Rio de Janeiro","São Paulo"}	{Portuguese}	Brasília	path/to/brazilian_flag.jpg
+Canada	{Ottawa,Toronto,Vancouver}	{English,French}	Ottawa	path/to/canadian_flag.jpg
+India	{"New Delhi",Mumbai,Bangalore}	{Hindi,English}	New Delhi	path/to/indian_flag.jpg
+Australia	{Canberra,Sydney,Melbourne}	{English}	Canberra	path/to/australian_flag.jpg
+South Africa	{Pretoria,"Cape Town",Johannesburg}	{English,Afrikaans,Zulu,Xhosa,"Southern Sotho"}	Pretoria	path/to/south_african_flag.jpg
+Russia	{Moscow,"Saint Petersburg",Novosibirsk}	{Russian}	Moscow	path/to/russian_flag.jpg
+Mexico	{"Mexico City",Guadalajara,Monterrey}	{Spanish}	Mexico City	path/to/mexican_flag.jpg
+England	{London,Manchester}	{English}	London	path/to/english_flag.jpg
+Italy	{Rome,Milan,Naples}	{Italian}	Rome	path/to/italian_flag.jpg
+Spain	{Madrid,Barcelona,Valencia}	{Spanish}	Madrid	path/to/spanish_flag.jpg
+China	{Beijing,Shanghai,"Hong Kong"}	{Chinese}	Beijing	path/to/chinese_flag.jpg
+Egypt	{Cairo,Alexandria,Giza}	{Arabic}	Cairo	path/to/egyptian_flag.jpg
+Nigeria	{Abuja,Lagos,Kano}	{English}	Abuja	path/to/nigerian_flag.jpg
+Sweden	{Stockholm,Gothenburg,Malmö}	{Swedish}	Stockholm	path/to/swedish_flag.jpg
+South Korea	{Seoul,Busan,Incheon}	{Korean}	Seoul	path/to/south_korean_flag.jpg
+Turkey	{Ankara,Istanbul,Izmir}	{Turkish}	Ankara	path/to/turkish_flag.jpg
+Thailand	{Bangkok,"Chiang Mai",Phuket}	{Thai}	Bangkok	path/to/thai_flag.jpg
+Netherlands	{Amsterdam,Rotterdam,"The Hague"}	{Dutch}	Amsterdam	path/to/dutch_flag.jpg
+Kenya	{Nairobi,Mombasa,Kisumu}	{Swahili,English}	Nairobi	path/to/kenyan_flag.jpg
+Chile	{Santiago,Valparaíso,Concepción}	{Spanish}	Santiago	path/to/chilean_flag.jpg
+Vietnam	{Hanoi,"Ho Chi Minh City","Da Nang"}	{Vietnamese}	Hanoi	path/to/vietnamese_flag.jpg
+Belgium	{Brussels,Antwerp,Ghent}	{Dutch,French,German}	Brussels	path/to/belgian_flag.jpg
+Greece	{Athens,Thessaloniki,Patras}	{Greek}	Athens	path/to/greek_flag.jpg
+Colombia	{Bogotá,Medellín,Cali}	{Spanish}	Bogotá	path/to/colombian_flag.jpg
+Finland	{Helsinki,Espoo,Tampere}	{Finnish,Swedish}	Helsinki	path/to/finnish_flag.jpg
+Philippines	{Manila,"Quezon City","Cebu City"}	{Filipino,English}	Manila	path/to/philippine_flag.jpg
+Saudi Arabia	{Riyadh,Jeddah,Mecca}	{Arabic}	Riyadh	path/to/saudi_arabian_flag.jpg
+Czech Republic	{Prague,Brno,Ostrava}	{Czech}	Prague	path/to/czech_flag.jpg
+Indonesia	{Jakarta,Bali,Surabaya}	{Indonesian}	Jakarta	path/to/indonesian_flag.jpg
+Ireland	{Dublin,Cork,Galway}	{English,Irish}	Dublin	path/to/irish_flag.jpg
+New Zealand	{Wellington,Auckland,Christchurch}	{English,Māori}	Wellington	path/to/new_zealand_flag.jpg
+Argentina	{"Buenos Aires",Córdoba,Rosario}	{Spanish}	Buenos Aires	path/to/argentinian_flag.jpg
+Switzerland	{Bern,Zurich,Geneva}	{German,French,Italian,Romansh}	Bern	path/to/swiss_flag.jpg
+Nepal	{Kathmandu,Pokhara,Lalitpur}	{Nepali}	Kathmandu	path/to/nepalese_flag.jpg
+United Arab Emirates	{"Abu Dhabi",Dubai,Sharjah}	{Arabic}	Abu Dhabi	path/to/uae_flag.jpg
+Poland	{Warsaw,Krakow,Lodz}	{Polish}	Warsaw	path/to/polish_flag.jpg
+Singapore	{Singapore}	{English,Malay,Mandarin,Tamil}	Singapore	path/to/singapore_flag.jpg
+Cuba	{Havana,"Santiago de Cuba",Camagüey}	{Spanish}	Havana	path/to/cuban_flag.jpg
+Ghana	{Accra,Kumasi,Tamale}	{English}	Accra	path/to/ghanaian_flag.jpg
+Bangladesh	{Dhaka,Chittagong,Khulna}	{Bengali}	Dhaka	path/to/bangladeshi_flag.jpg
+Croatia	{Zagreb,Split,Rijeka}	{Croatian}	Zagreb	path/to/croatian_flag.jpg
+Ecuador	{Quito,Guayaquil,Cuenca}	{Spanish}	Quito	path/to/ecuadorian_flag.jpg
+Norway	{Oslo,Bergen,Trondheim}	{Norwegian}	Oslo	path/to/norwegian_flag.jpg
+Panama	{"Panama City",Colón,David}	{Spanish}	Panama City	path/to/panamanian_flag.jpg
+Romania	{Bucharest,Cluj-Napoca,Timișoara}	{Romanian}	Bucharest	path/to/romanian_flag.jpg
+Serbia	{Belgrade,"Novi Sad",Niš}	{Serbian}	Belgrade	path/to/serbian_flag.jpg
+Tanzania	{Dodoma,"Dar es Salaam",Mwanza}	{Swahili}	Dodoma	path/to/tanzanian_flag.jpg
+Venezuela	{Caracas,Maracaibo,Valencia}	{Spanish}	Caracas	path/to/venezuelan_flag.jpg
+Denmark	{Copenhagen,Aarhus,Odense}	{Danish}	Copenhagen	path/to/danish_flag.jpg
+Hungary	{Budapest,Debrecen,Szeged}	{Hungarian}	Budapest	path/to/hungarian_flag.jpg
+Israel	{Jerusalem,"Tel Aviv",Haifa}	{Hebrew}	Jerusalem	path/to/israeli_flag.jpg
+Malaysia	{"Kuala Lumpur","George Town",Ipoh}	{Malay}	Kuala Lumpur	path/to/malaysian_flag.jpg
+Portugal	{Lisbon,Porto,Braga}	{Portuguese}	Lisbon	path/to/portuguese_flag.jpg
+Sri Lanka	{Colombo,Kandy,Galle}	{Sinhala,Tamil}	Colombo	path/to/sri_lankan_flag.jpg
+Ukraine	{Kyiv,Kharkiv,Odessa}	{Ukrainian}	Kyiv	path/to/ukrainian_flag.jpg
+Austria	{Vienna,Graz,Linz}	{German}	Vienna	path/to/austrian_flag.jpg
+Bulgaria	{Sofia,Plovdiv,Varna}	{Bulgarian}	Sofia	path/to/bulgarian_flag.jpg
+Jordan	{Amman,Zarqa,Irbid}	{Arabic}	Amman	path/to/jordanian_flag.jpg
+Kazakhstan	{Nur-Sultan,Almaty,Shymkent}	{Kazakh,Russian}	Nur-Sultan	path/to/kazakhstani_flag.jpg
+Lithuania	{Vilnius,Kaunas,Klaipėda}	{Lithuanian}	Vilnius	path/to/lithuanian_flag.jpg
+Morocco	{Rabat,Casablanca,Marrakesh}	{Arabic}	Rabat	path/to/moroccan_flag.jpg
+Peru	{Lima,Arequipa,Cusco}	{Spanish}	Lima	path/to/peruvian_flag.jpg
+Slovakia	{Bratislava,Košice,Prešov}	{Slovak}	Bratislava	path/to/slovak_flag.jpg
+Costa Rica	{"San José",Alajuela,Cartago}	{Spanish}	San José	path/to/costa_rican_flag.jpg
+Estonia	{Tallinn,Tartu,Narva}	{Estonian}	Tallinn	path/to/estonian_flag.jpg
+Iceland	{Reykjavik,Kópavogur,Hafnarfjörður}	{Icelandic}	Reykjavik	path/to/icelandic_flag.jpg
+Latvia	{Riga,Daugavpils,Liepāja}	{Latvian}	Riga	path/to/latvian_flag.jpg
+Lebanon	{Beirut,Tripoli,Sidon}	{Arabic}	Beirut	path/to/lebanese_flag.jpg
+Mongolia	{Ulaanbaatar,Erdenet,Darkhan}	{Mongolian}	Ulaanbaatar	path/to/mongolian_flag.jpg
+Qatar	{Doha,"Al Rayyan","Umm Salal"}	{Arabic}	Doha	path/to/qatari_flag.jpg
+Slovenia	{Ljubljana,Maribor,Kranj}	{Slovene}	Ljubljana	path/to/slovenian_flag.jpg
+Tunisia	{Tunis,Sfax,Sousse}	{Arabic}	Tunis	path/to/tunisian_flag.jpg
+Zimbabwe	{Harare,Bulawayo,Chitungwiza}	{English}	Harare	path/to/zimbabwean_flag.jpg
+Algeria	{Algiers,Oran,Constantine}	{Arabic}	Algiers	path/to/algerian_flag.jpg
+Belarus	{Minsk,Gomel,Mogilev}	{Belarusian,Russian}	Minsk	path/to/belarusian_flag.jpg
+Cyprus	{Nicosia,Limassol,Larnaca}	{Greek,Turkish}	Nicosia	path/to/cypriot_flag.jpg
+Fiji	{Suva,Nadi,Lautoka}	{English,Fijian,Hindi}	Suva	path/to/fijian_flag.jpg
+Luxembourg	{"Luxembourg City",Esch-sur-Alzette,Dudelange}	{Luxembourgish,French,German}	Luxembourg City	path/to/luxembourg_flag.jpg
+Mali	{Bamako,Sikasso,Mopti}	{French}	Bamako	path/to/malian_flag.jpg
+Oman	{Muscat,Salalah,Sohar}	{Arabic}	Muscat	path/to/omani_flag.jpg
+Papua New Guinea	{"Port Moresby",Lae,"Mount Hagen"}	{English,"Tok Pisin","Hiri Motu"}	Port Moresby	path/to/papua_new_guinean_flag.jpg
+Senegal	{Dakar,Touba,Thiès}	{French}	Dakar	path/to/senegalese_flag.jpg
+Uzbekistan	{Tashkent,Samarkand,Bukhara}	{Uzbek}	Tashkent	path/to/uzbekistani_flag.jpg
+United States	\N	\N	\N	\N
+Cote D’Ivoire	\N	\N	\N	\N
+Northern Ireland	\N	\N	\N	\N
+Paraguay	\N	\N	\N	\N
+Wales	\N	\N	\N	\N
+Jamaica	\N	\N	\N	\N
+Scotland	\N	\N	\N	\N
+Gabon	\N	\N	\N	\N
+Guinea-Bissau	\N	\N	\N	\N
+Grenada	\N	\N	\N	\N
+Bosnia & Herzegovina	\N	\N	\N	\N
+Uruguay	\N	\N	\N	\N
+Cameroon	\N	\N	\N	\N
+Albania	\N	\N	\N	\N
+Iraq	\N	\N	\N	\N
+Sierra Leone	\N	\N	\N	\N
+Zambia	\N	\N	\N	\N
+Iran	\N	\N	\N	\N
+Angola	\N	\N	\N	\N
+Guinea	\N	\N	\N	\N
+Burkina Faso	\N	\N	\N	\N
+DR Congo	\N	\N	\N	\N
+Liberia	\N	\N	\N	\N
+Montserrat	\N	\N	\N	\N
+Nicaragua	\N	\N	\N	\N
+Guyana	\N	\N	\N	\N
+Kosovo	\N	\N	\N	\N
+	\N	\N	\N	\N
+Montenegro	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: keeper; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.keeper (k_id, k_name, k_agent, k_dob, k_yellowcards, k_redcards, k_fouls, k_interceptions, k_height, k_weight, k_isavailable, k_passcompletion, k_salary, k_saves, k_citizenof, k_team) FROM stdin;
+132	Alphonse Areola	Alex Rodriguez	2000-08-25	0	0	0	0	194	90	t	0.61	1289260	254	France	\N
+133	Luca Ashby-Hammond	Liam Smith	1986-09-28	0	0	0	0	173	70	t	0.47000000000000003	367898	257	England	\N
+134	Brandon Austin	John Miller	1995-01-27	0	0	0	0	188	86	t	0.39	2125640	121	England	\N
+135	Ellery Balcombe	Michael Rodriguez	1990-07-10	0	0	0	0	171	84	t	0.65	1185595	102	England	\N
+136	Nathan Baxter	Noah Johnson	1994-06-06	0	0	0	0	188	65	t	0.1	1339142	380	England	\N
+137	Gavin Bazunu	Emma Jones	2002-08-08	0	0	0	0	192	84	t	0.79	299722	397	Ireland	\N
+138	Eddie Beach	Michael Smith	2001-11-26	0	0	0	0	177	56	t	0.54	1755089	264	Wales	\N
+139	Asmir Begovic	Noah Davis	2003-12-25	0	0	0	0	170	94	t	0.56	2605934	371	Bosnia & Herzegovina	\N
+140	Dan Bentley	Alex Miller	1992-09-10	0	0	0	0	208	64	t	0.63	2647797	249	England	\N
+141	Lucas Bergström	Olivia Williams	2004-09-13	0	0	0	0	206	84	t	0.16	2506812	192	Finland	\N
+142	Marcus Bettinelli	Maria Miller	1984-12-18	0	0	0	0	208	55	t	0.58	1770932	77	England	\N
+143	Nathan Bishop	Emma Jones	1986-07-10	0	0	0	0	203	56	t	0.98	246077	367	England	\N
+144	Jack Butland	Michael Jones	2001-01-30	0	0	0	0	195	88	t	0.34	534883	68	England	\N
+145	Willy Caballero	Sophia Martinez	1995-04-30	0	0	0	0	198	59	t	0.5	1936897	253	Argentina	\N
+146	Elia Caprile	Michael Garcia	1993-06-27	0	0	0	0	184	97	t	0.76	389813	195	Italy	\N
+147	Scott Carson	Sophia Davis	2000-10-27	0	0	0	0	209	86	t	0.97	1984679	95	England	\N
+148	Harry Christy	James Williams	1985-06-15	0	0	0	0	176	61	t	0.17	2759027	59	England	\N
+149	Matthew Cox	Michael Martinez	1993-09-04	0	0	0	0	181	93	t	0.23	66730	53	England	\N
+150	Billy Crellin	James Martinez	1993-11-27	0	0	0	0	189	76	t	0.53	2300605	379	England	\N
+151	Jamie Cumming	Sophia Jones	2003-10-11	0	0	0	0	182	80	t	0.89	302792	117	England	\N
+152	Karl Darlow	Noah Garcia	2005-08-10	0	0	0	0	173	81	t	0.18	319633	88	England	\N
+153	David de Gea	James Jones	1997-01-09	0	0	0	0	184	58	t	0.63	1823817	215	Spain	\N
+154	Will Dennis	Alex Garcia	2005-10-04	0	0	0	0	171	94	t	0.96	2951537	17	England	\N
+155	Martin Dúbravka	James Davis	2002-09-14	0	0	0	0	188	54	t	0.15	1881723	79	Slovakia	\N
+156	Ederson	Liam Davis	1994-03-09	0	0	0	0	169	92	t	0.17	2403537	24	Brazil	\N
+157	Lukasz Fabianski	Emma Rodriguez	1998-05-07	0	0	0	0	178	92	t	0.47000000000000003	2996777	314	Poland	\N
+158	Fabri	Michael Johnson	2003-10-13	0	0	0	0	204	86	t	0.28	1856885	334	Spain	\N
+159	Álvaro Fernández	Alex Johnson	1987-11-08	0	0	0	0	204	56	t	0.54	2999091	317	Spain	\N
+160	Fraser Forster	Olivia Rodriguez	1991-11-13	0	0	0	0	173	64	t	0.52	934231	29	England	\N
+161	Paulo Gazzaniga	Noah Rodriguez	1986-10-11	0	0	0	0	207	96	t	0.34	2682094	168	Argentina	\N
+162	George Shelvey	Emma Miller	1987-09-06	0	0	0	0	182	97	t	0.6900000000000001	1350517	161	England	\N
+163	Mark Gillespie	Liam Jones	1990-04-21	0	0	0	0	170	90	t	0.71	2088292	117	England	\N
+164	Pierluigi Gollini	Michael Garcia	1989-01-25	0	0	0	0	193	96	t	0.86	2658895	347	Italy	\N
+165	Owen Goodman	John Williams	1999-08-19	0	0	0	0	208	86	t	0.1	1971069	199	England	\N
+166	Hubert Graczyk	Noah Johnson	1989-11-29	0	0	0	0	199	69	t	0.36	1566891	148	Poland	\N
+167	Lee Grant	Emma Brown	1995-09-15	0	0	0	0	209	64	t	0.19	105550	125	England	\N
+168	Vicente Guaita	Liam Smith	1996-11-30	0	0	0	0	180	65	t	0.32	2756099	217	Spain	\N
+169	Patrik Gunnarsson	Maria Brown	1986-12-29	0	0	0	0	188	59	t	0.54	2849928	253	Iceland	\N
+170	Tom Heaton	Olivia Martinez	1989-02-26	0	0	0	0	204	87	t	0.75	93311	234	England	\N
+171	Krisztián Hegyi	Alex Martinez	2000-11-18	0	0	0	0	180	82	t	0.31	757572	158	Hungary	\N
+172	Karl Hein	John Garcia	1996-05-07	0	0	0	0	199	68	t	0.81	1036592	45	Estonia	\N
+173	Wayne Hennessey	Olivia Smith	1996-02-19	0	0	0	0	198	66	t	0.04	2542546	19	Wales	\N
+174	James Hillson	John Martinez	1993-02-26	0	0	0	0	173	58	t	0.75	433714	312	England	\N
+175	Ethan Horvath	Noah Williams	1997-01-05	0	0	0	0	180	62	t	0.7000000000000001	534545	342	United States	\N
+176	Daniel Iversen	Olivia Brown	2004-07-03	0	0	0	0	205	68	t	0.18	2584362	252	Denmark	\N
+177	Eldin Jakupovic	Liam Davis	1988-01-03	0	0	0	0	198	62	t	0.66	319997	4	Switzerland	\N
+178	Vítezslav Jaros	Noah Miller	2005-03-23	0	0	0	0	203	63	t	0.3	306156	386	Czech Republic	\N
+179	João Virgínia	Noah Garcia	1986-05-16	0	0	0	0	201	85	t	0.25	2172906	279	Portugal	\N
+180	Sam Johnstone	James Garcia	1986-08-30	0	0	0	0	204	95	t	0.64	1599277	27	England	\N
+181	José Sá	John Brown	1994-05-17	0	0	0	0	200	84	t	0.01	1570225	245	Portugal	\N
+182	Loris Karius	Michael Williams	1996-12-11	0	0	0	0	176	63	t	0.68	2461796	73	Germany	\N
+183	Josh Keeley	James Davis	2001-05-02	0	0	0	0	200	67	t	0.77	2306165	331	Ireland	\N
+184	Caoimhín Kelleher	Sophia Davis	1999-05-13	0	0	0	0	195	99	t	0.52	2035012	209	Ireland	\N
+185	Kepa	Olivia Smith	2002-10-21	0	0	0	0	178	58	t	0.59	475003	225	Spain	\N
+186	Kiko Casilla	Noah Miller	1989-11-05	0	0	0	0	170	59	t	0.03	1511131	156	Spain	\N
+129	Adrián	Michael Smith	2000-07-03	0	0	0	0	193	58	t	0.8300000000000001	659281	76	Spain	\N
+130	Alisson Becker	Michael Johnson	1995-04-04	0	0	0	0	203	79	t	0.16	2880585	373	Brazil	\N
+131	Joseph Anang	James Davis	2003-12-13	0	0	0	0	198	59	t	0.99	916241	332	England	\N
+187	Kristoffer Klaesson	Emma Williams	1995-01-12	0	0	0	0	189	74	t	0.37	2331296	228	Norway	\N
+188	Matej Kovár	Noah Martinez	2005-06-09	0	0	0	0	187	76	t	0.47000000000000003	2908031	190	Czech Republic	\N
+189	Daniel Langley	Emma Rodriguez	1995-05-03	0	0	0	0	184	75	t	0.52	1808805	387	England	\N
+190	Zan-Luk Leban	Maria Brown	1998-08-09	0	0	0	0	187	99	t	0.08	315417	204	Slovenia	\N
+191	Bernd Leno	Alex Johnson	1996-07-23	0	0	0	0	201	85	t	0.33	1443561	96	Germany	\N
+192	Mateusz Lis	Michael Rodriguez	1984-03-08	0	0	0	0	184	70	t	0.24	1162217	320	Poland	\N
+193	Hugo Lloris	James Jones	2001-05-24	0	0	0	0	184	78	t	0.33	1209376	349	France	\N
+194	Andy Lonergan	John Davis	1988-11-04	0	0	0	0	197	65	t	0.71	1509501	340	England	\N
+195	Jonas Lössl	John Miller	2005-01-15	0	0	0	0	173	89	t	0.03	2417134	42	Denmark	\N
+196	Marcelo Pitaluga	Noah Martinez	1995-07-10	0	0	0	0	190	98	t	0.19	524809	181	Brazil	\N
+197	Filip Marschall	Olivia Williams	2004-09-28	0	0	0	0	174	94	t	0.9500000000000001	554813	191	England	\N
+198	David Martin	Noah Rodriguez	1989-10-06	0	0	0	0	191	68	t	0.09	1510875	129	England	\N
+199	Emiliano Martínez	Olivia Miller	1993-04-18	0	0	0	0	195	96	t	0.8	1113910	98	Argentina	\N
+200	Remi Matthews	Michael Miller	1990-10-15	0	0	0	0	174	85	t	0.33	2131286	135	England	\N
+201	Alex McCarthy	Michael Smith	1986-12-07	0	0	0	0	202	80	t	0.41000000000000003	1231444	10	England	\N
+202	Tom McGill	Noah Williams	1990-02-11	0	0	0	0	198	72	t	0.26	282366	239	Canada	\N
+203	Édouard Mendy	James Smith	2004-04-30	0	0	0	0	184	59	t	0.3	1171970	151	Senegal	\N
+204	Illan Meslier	Emma Brown	2001-03-05	0	0	0	0	200	96	t	0.02	843221	256	France	\N
+205	Louie Moulden	Sophia Miller	1989-09-07	0	0	0	0	170	89	t	0.93	2092170	326	England	\N
+206	Fabian Mrozek	John Williams	2002-08-14	0	0	0	0	181	74	t	0.23	285907	165	Poland	\N
+207	Arijanet Muric	Emma Johnson	1991-10-28	0	0	0	0	170	81	t	0.85	2114547	188	Kosovo	\N
+208	Keylor Navas	Michael Rodriguez	1994-06-25	0	0	0	0	210	54	t	0.3	671084	269	Costa Rica	\N
+209	Neto	Michael Miller	1986-06-29	0	0	0	0	199	54	t	0.22	1292243	48	Brazil	\N
+210	Chituru Odunze	Olivia Garcia	1989-01-27	0	0	0	0	197	69	t	0.97	1081244	132	United States	\N
+211	Arthur Okonkwo	James Miller	2004-05-25	0	0	0	0	179	61	t	0.41000000000000003	244491	70	England	\N
+212	Robin Olsen	Sophia Davis	1992-12-01	0	0	0	0	171	75	t	0.05	1861912	369	Sweden	\N
+213	Stefan Ortega	Emma Martinez	2004-12-17	0	0	0	0	187	65	t	0.28	563712	111	Germany	\N
+214	Jordan Pickford	Michael Garcia	1986-11-09	0	0	0	0	193	91	t	0.35000000000000003	65063	229	England	\N
+215	Cameron Plain	Emma Garcia	1999-10-16	0	0	0	0	177	95	t	0.92	947836	70	England	\N
+216	Nick Pope	Sophia Brown	2004-04-26	0	0	0	0	201	73	t	0.34	1824129	283	England	\N
+217	Aaron Ramsdale	John Davis	2003-04-21	0	0	0	0	187	57	t	0.22	2701408	352	England	\N
+218	Darren Randolph	Liam Smith	2004-07-29	0	0	0	0	202	88	t	0.65	440126	262	Ireland	\N
+219	David Raya	James Garcia	2001-07-30	0	0	0	0	175	54	t	1	1399498	225	Spain	\N
+220	Joel Robles	Liam Martinez	1996-06-10	0	0	0	0	206	81	t	0.26	2542233	338	Spain	\N
+221	Marek Rodák	Maria Davis	2002-09-23	0	0	0	0	181	88	t	0.03	550823	105	Slovakia	\N
+222	John Ruddy	Sophia Davis	1997-06-29	0	0	0	0	186	97	t	0.02	859563	18	England	\N
+223	Rúnar Rúnarsson	Liam Miller	1991-08-16	0	0	0	0	208	73	t	0.01	1408947	319	Iceland	\N
+224	Brice Samba	James Garcia	1984-08-07	0	0	0	0	202	82	t	0.97	1059062	133	France	\N
+225	Robert Sánchez	James Smith	2005-12-27	0	0	0	0	173	89	t	0.1	2220457	88	Spain	\N
+226	Matija Sarkic	Alex Garcia	1991-01-29	0	0	0	0	192	75	t	0.04	616828	283	Montenegro	\N
+227	Kjell Scherpen	Emma Garcia	2003-11-02	0	0	0	0	194	99	t	0.61	2399321	120	Netherlands	\N
+228	Kasper Schmeichel	Olivia Brown	1989-11-06	0	0	0	0	178	97	t	0.15	988753	88	Denmark	\N
+229	Teddy Sharman-Lowe	James Smith	1999-06-15	0	0	0	0	210	54	t	0.81	181932	96	England	\N
+230	Viljami Sinisalo	Alex Williams	1993-01-27	0	0	0	0	178	79	t	0.86	481200	216	Finland	\N
+231	Cieran Slicker	Sophia Johnson	1995-07-15	0	0	0	0	179	55	t	0.8200000000000001	867276	287	Scotland	\N
+232	Gabriel Slonina	John Brown	2005-08-07	0	0	0	0	200	93	t	0.88	1732441	201	United States	\N
+233	Alex Smithies	James Miller	2001-08-08	0	0	0	0	203	61	t	0.58	79533	20	England	\N
+234	Andreas Söndergaard	Liam Smith	1991-06-08	0	0	0	0	207	99	t	0.98	54048	9	Denmark	\N
+235	Jason Steele	James Jones	1997-09-23	0	0	0	0	184	84	t	0.29	2280224	314	England	\N
+236	Jed Steer	James Davis	2002-02-12	0	0	0	0	204	92	t	0.09	1476206	259	England	\N
+237	Zack Steffen	Alex Rodriguez	2004-03-04	0	0	0	0	169	89	t	0.6	2308190	177	United States	\N
+238	Jakub Stolarczyk	Maria Johnson	1992-10-30	0	0	0	0	183	89	t	0.86	1759140	238	Poland	\N
+239	James Storer	Liam Garcia	1984-07-24	0	0	0	0	180	64	t	0.8200000000000001	1811354	267	Ireland	\N
+240	Thomas Strakosha	James Jones	2000-11-16	0	0	0	0	187	85	t	0.15	162910	206	Albania	\N
+241	Mark Travers	Maria Johnson	1985-01-13	0	0	0	0	180	96	t	0.9400000000000001	2183721	380	Ireland	\N
+242	Nathan Trott	Alex Smith	1985-06-13	0	0	0	0	174	57	t	0.9	1542472	307	England	\N
+243	Matt Turner	Noah Garcia	2000-11-29	0	0	0	0	200	72	t	0.11	1641919	136	United States	\N
+244	Harry Tyrer	Olivia Garcia	1990-02-08	0	0	0	0	209	93	t	0.06	504451	42	England	\N
+245	Dani van den Heuvel	Michael Miller	1993-10-19	0	0	0	0	204	92	t	0.47000000000000003	2213924	137	Netherlands	\N
+246	Mikki van Sas	James Smith	2001-01-14	0	0	0	0	194	82	t	0.8200000000000001	2753969	40	Netherlands	\N
+247	Radek Vítek	Olivia Miller	1987-01-05	0	0	0	0	210	84	t	0.12	1824543	156	Czech Republic	\N
+248	Ethan Wady	John Rodriguez	2000-09-30	0	0	0	0	182	77	t	0.3	2419843	309	United States	\N
+249	Christian Walton	Olivia Garcia	1998-08-14	0	0	0	0	177	80	t	0.77	1734508	357	England	\N
+250	Alfie Whiteman	Noah Garcia	2005-06-04	0	0	0	0	175	64	t	0.33	2665456	38	England	\N
+251	Joe Whitworth	James Williams	1996-10-15	0	0	0	0	208	62	t	0.92	2177560	285	England	\N
+252	George Wickens	Olivia Jones	1985-10-24	0	0	0	0	202	95	t	0.53	1069134	128	England	\N
+253	Keehan Willows	Emma Smith	1998-02-06	0	0	0	0	184	98	t	0.06	79453	198	England	\N
+254	Freddie Woodman	Sophia Rodriguez	2000-01-31	0	0	0	0	194	93	t	0.05	174823	273	England	\N
+255	James Wright	Noah Rodriguez	1993-09-07	0	0	0	0	189	94	t	0.9500000000000001	2082684	243	England	\N
+256	Oliwier Zych	Liam Brown	1987-04-26	0	0	0	0	207	72	t	0.11	1260636	26	Poland	\N
+\.
+
+
+--
+-- Data for Name: league; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.league (l_name, l_officials, l_country) FROM stdin;
+Premier League	{"Michael Oliver","Stuart Attwell","Paul Tierney","Graham Scott","Mike Riley","Alan Wiley","Peter Jones","Chris Foy","Anthony Taylor","Darren England"}	England
+\.
+
+
+--
+-- Data for Name: matches; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.matches (m_id, m_hometeam, m_awayteam, m_league, m_homegoals, m_awaygoals, m_date) FROM stdin;
+1	Crystal Palace	Arsenal	Premier League	0	2	2022-08-05
+2	Fulham	Liverpool	Premier League	2	2	2022-08-06
+3	Tottenham	Southampton	Premier League	4	1	2022-08-06
+4	Newcastle Utd	Nott'ham Forest	Premier League	2	0	2022-08-06
+5	Leeds United	Wolves	Premier League	2	1	2022-08-06
+6	Bournemouth	Aston Villa	Premier League	2	0	2022-08-06
+7	Everton	Chelsea	Premier League	0	1	2022-08-06
+8	Leicester City	Brentford	Premier League	2	2	2022-08-07
+9	Manchester Utd	Brighton	Premier League	1	2	2022-08-07
+10	West Ham	Manchester City	Premier League	0	2	2022-08-07
+11	Aston Villa	Everton	Premier League	2	1	2022-08-13
+12	Manchester City	Bournemouth	Premier League	4	0	2022-08-13
+13	Southampton	Leeds United	Premier League	2	2	2022-08-13
+14	Wolves	Fulham	Premier League	0	0	2022-08-13
+15	Arsenal	Leicester City	Premier League	4	2	2022-08-13
+16	Brighton	Newcastle Utd	Premier League	0	0	2022-08-13
+17	Brentford	Manchester Utd	Premier League	4	0	2022-08-13
+18	Nott'ham Forest	West Ham	Premier League	1	0	2022-08-14
+19	Chelsea	Tottenham	Premier League	2	2	2022-08-14
+20	Liverpool	Crystal Palace	Premier League	1	1	2022-08-15
+21	Tottenham	Wolves	Premier League	1	0	2022-08-20
+22	Leicester City	Southampton	Premier League	1	2	2022-08-20
+23	Everton	Nott'ham Forest	Premier League	1	1	2022-08-20
+24	Crystal Palace	Aston Villa	Premier League	3	1	2022-08-20
+25	Fulham	Brentford	Premier League	3	2	2022-08-20
+26	Bournemouth	Arsenal	Premier League	0	3	2022-08-20
+27	Leeds United	Chelsea	Premier League	3	0	2022-08-21
+28	West Ham	Brighton	Premier League	0	2	2022-08-21
+29	Newcastle Utd	Manchester City	Premier League	3	3	2022-08-21
+30	Manchester Utd	Liverpool	Premier League	2	1	2022-08-22
+31	Southampton	Manchester Utd	Premier League	0	1	2022-08-27
+32	Manchester City	Crystal Palace	Premier League	4	2	2022-08-27
+33	Brighton	Leeds United	Premier League	1	0	2022-08-27
+34	Chelsea	Leicester City	Premier League	2	1	2022-08-27
+35	Brentford	Everton	Premier League	1	1	2022-08-27
+36	Liverpool	Bournemouth	Premier League	9	0	2022-08-27
+37	Arsenal	Fulham	Premier League	2	1	2022-08-27
+38	Wolves	Newcastle Utd	Premier League	1	1	2022-08-28
+39	Aston Villa	West Ham	Premier League	0	1	2022-08-28
+40	Nott'ham Forest	Tottenham	Premier League	0	2	2022-08-28
+41	Fulham	Brighton	Premier League	2	1	2022-08-30
+42	Crystal Palace	Brentford	Premier League	1	1	2022-08-30
+43	Southampton	Chelsea	Premier League	2	1	2022-08-30
+44	Leeds United	Everton	Premier League	1	1	2022-08-30
+45	Bournemouth	Wolves	Premier League	0	0	2022-08-31
+46	Manchester City	Nott'ham Forest	Premier League	6	0	2022-08-31
+47	Arsenal	Aston Villa	Premier League	2	1	2022-08-31
+48	West Ham	Tottenham	Premier League	1	1	2022-08-31
+49	Liverpool	Newcastle Utd	Premier League	2	1	2022-08-31
+50	Leicester City	Manchester Utd	Premier League	0	1	2022-09-01
+51	Everton	Liverpool	Premier League	0	0	2022-09-03
+52	Nott'ham Forest	Bournemouth	Premier League	2	3	2022-09-03
+53	Wolves	Southampton	Premier League	1	0	2022-09-03
+54	Newcastle Utd	Crystal Palace	Premier League	0	0	2022-09-03
+55	Brentford	Leeds United	Premier League	5	2	2022-09-03
+56	Tottenham	Fulham	Premier League	2	1	2022-09-03
+57	Chelsea	West Ham	Premier League	2	1	2022-09-03
+58	Aston Villa	Manchester City	Premier League	1	1	2022-09-03
+59	Brighton	Leicester City	Premier League	5	2	2022-09-04
+60	Manchester Utd	Arsenal	Premier League	3	1	2022-09-04
+61	Aston Villa	Southampton	Premier League	1	0	2022-09-16
+62	Nott'ham Forest	Fulham	Premier League	2	3	2022-09-16
+63	Wolves	Manchester City	Premier League	0	3	2022-09-17
+64	Newcastle Utd	Bournemouth	Premier League	1	1	2022-09-17
+65	Tottenham	Leicester City	Premier League	6	2	2022-09-17
+66	Brentford	Arsenal	Premier League	0	3	2022-09-18
+67	Everton	West Ham	Premier League	1	0	2022-09-18
+68	Arsenal	Tottenham	Premier League	3	1	2022-10-01
+69	Southampton	Everton	Premier League	1	2	2022-10-01
+70	Crystal Palace	Chelsea	Premier League	1	2	2022-10-01
+71	Liverpool	Brighton	Premier League	3	3	2022-10-01
+72	Fulham	Newcastle Utd	Premier League	1	4	2022-10-01
+73	Bournemouth	Brentford	Premier League	0	0	2022-10-01
+74	West Ham	Wolves	Premier League	2	0	2022-10-01
+75	Manchester City	Manchester Utd	Premier League	6	3	2022-10-02
+76	Leeds United	Aston Villa	Premier League	0	0	2022-10-02
+77	Leicester City	Nott'ham Forest	Premier League	4	0	2022-10-03
+78	Bournemouth	Leicester City	Premier League	2	1	2022-10-08
+79	Newcastle Utd	Brentford	Premier League	5	1	2022-10-08
+80	Manchester City	Southampton	Premier League	4	0	2022-10-08
+81	Chelsea	Wolves	Premier League	3	0	2022-10-08
+82	Brighton	Tottenham	Premier League	0	1	2022-10-08
+83	West Ham	Fulham	Premier League	3	1	2022-10-09
+84	Crystal Palace	Leeds United	Premier League	2	1	2022-10-09
+85	Arsenal	Liverpool	Premier League	3	2	2022-10-09
+86	Everton	Manchester Utd	Premier League	1	2	2022-10-09
+87	Nott'ham Forest	Aston Villa	Premier League	1	1	2022-10-10
+88	Brentford	Brighton	Premier League	2	0	2022-10-14
+89	Leicester City	Crystal Palace	Premier League	0	0	2022-10-15
+90	Fulham	Bournemouth	Premier League	2	2	2022-10-15
+91	Wolves	Nott'ham Forest	Premier League	1	0	2022-10-15
+92	Tottenham	Everton	Premier League	2	0	2022-10-15
+93	Southampton	West Ham	Premier League	1	1	2022-10-16
+94	Aston Villa	Chelsea	Premier League	0	2	2022-10-16
+95	Leeds United	Arsenal	Premier League	0	1	2022-10-16
+96	Manchester Utd	Newcastle Utd	Premier League	0	0	2022-10-16
+97	Liverpool	Manchester City	Premier League	1	0	2022-10-16
+98	Brighton	Nott'ham Forest	Premier League	0	0	2022-10-18
+99	Crystal Palace	Wolves	Premier League	2	1	2022-10-18
+100	Bournemouth	Southampton	Premier League	0	1	2022-10-19
+101	Brentford	Chelsea	Premier League	0	0	2022-10-19
+102	Liverpool	West Ham	Premier League	1	0	2022-10-19
+103	Newcastle Utd	Everton	Premier League	1	0	2022-10-19
+104	Manchester Utd	Tottenham	Premier League	2	0	2022-10-19
+105	Fulham	Aston Villa	Premier League	3	0	2022-10-20
+106	Leicester City	Leeds United	Premier League	2	0	2022-10-20
+107	Nott'ham Forest	Liverpool	Premier League	1	0	2022-10-22
+108	Everton	Crystal Palace	Premier League	3	0	2022-10-22
+109	Manchester City	Brighton	Premier League	3	1	2022-10-22
+110	Chelsea	Manchester Utd	Premier League	1	1	2022-10-22
+111	Aston Villa	Brentford	Premier League	4	0	2022-10-23
+112	Wolves	Leicester City	Premier League	0	4	2022-10-23
+113	Leeds United	Fulham	Premier League	2	3	2022-10-23
+114	Southampton	Arsenal	Premier League	1	1	2022-10-23
+115	Tottenham	Newcastle Utd	Premier League	1	2	2022-10-23
+116	West Ham	Bournemouth	Premier League	2	0	2022-10-24
+117	Leicester City	Manchester City	Premier League	0	1	2022-10-29
+118	Brentford	Wolves	Premier League	1	1	2022-10-29
+119	Crystal Palace	Southampton	Premier League	1	0	2022-10-29
+120	Newcastle Utd	Aston Villa	Premier League	4	0	2022-10-29
+121	Brighton	Chelsea	Premier League	4	1	2022-10-29
+122	Bournemouth	Tottenham	Premier League	2	3	2022-10-29
+123	Fulham	Everton	Premier League	0	0	2022-10-29
+124	Liverpool	Leeds United	Premier League	1	2	2022-10-29
+125	Arsenal	Nott'ham Forest	Premier League	5	0	2022-10-30
+126	Manchester Utd	West Ham	Premier League	1	0	2022-10-30
+127	Nott'ham Forest	Brentford	Premier League	2	2	2022-11-05
+128	Leeds United	Bournemouth	Premier League	4	3	2022-11-05
+129	Manchester City	Fulham	Premier League	2	1	2022-11-05
+130	Wolves	Brighton	Premier League	2	3	2022-11-05
+131	Everton	Leicester City	Premier League	0	2	2022-11-05
+132	Chelsea	Arsenal	Premier League	0	1	2022-11-06
+133	West Ham	Crystal Palace	Premier League	1	2	2022-11-06
+134	Southampton	Newcastle Utd	Premier League	1	4	2022-11-06
+135	Aston Villa	Manchester Utd	Premier League	3	1	2022-11-06
+136	Tottenham	Liverpool	Premier League	1	2	2022-11-06
+137	Manchester City	Brentford	Premier League	1	2	2022-11-12
+138	Tottenham	Leeds United	Premier League	4	3	2022-11-12
+139	Liverpool	Southampton	Premier League	3	1	2022-11-12
+140	Bournemouth	Everton	Premier League	3	0	2022-11-12
+141	West Ham	Leicester City	Premier League	0	2	2022-11-12
+142	Nott'ham Forest	Crystal Palace	Premier League	1	0	2022-11-12
+143	Newcastle Utd	Chelsea	Premier League	1	0	2022-11-12
+144	Wolves	Arsenal	Premier League	0	2	2022-11-12
+145	Brighton	Aston Villa	Premier League	1	2	2022-11-13
+146	Fulham	Manchester Utd	Premier League	1	2	2022-11-13
+147	Brentford	Tottenham	Premier League	2	2	2022-12-26
+148	Southampton	Brighton	Premier League	1	3	2022-12-26
+149	Leicester City	Newcastle Utd	Premier League	0	3	2022-12-26
+150	Crystal Palace	Fulham	Premier League	0	3	2022-12-26
+151	Everton	Wolves	Premier League	1	2	2022-12-26
+152	Aston Villa	Liverpool	Premier League	1	3	2022-12-26
+153	Arsenal	West Ham	Premier League	3	1	2022-12-26
+154	Chelsea	Bournemouth	Premier League	2	0	2022-12-27
+155	Manchester Utd	Nott'ham Forest	Premier League	3	0	2022-12-27
+156	Leeds United	Manchester City	Premier League	1	3	2022-12-28
+157	West Ham	Brentford	Premier League	0	2	2022-12-30
+158	Liverpool	Leicester City	Premier League	2	1	2022-12-30
+159	Wolves	Manchester Utd	Premier League	0	1	2022-12-31
+160	Newcastle Utd	Leeds United	Premier League	0	0	2022-12-31
+161	Fulham	Southampton	Premier League	2	1	2022-12-31
+162	Manchester City	Everton	Premier League	1	1	2022-12-31
+163	Bournemouth	Crystal Palace	Premier League	0	2	2022-12-31
+164	Brighton	Arsenal	Premier League	2	4	2022-12-31
+165	Tottenham	Aston Villa	Premier League	0	2	2023-01-01
+166	Nott'ham Forest	Chelsea	Premier League	1	1	2023-01-01
+167	Brentford	Liverpool	Premier League	3	1	2023-01-02
+168	Leicester City	Fulham	Premier League	0	1	2023-01-03
+169	Everton	Brighton	Premier League	1	4	2023-01-03
+170	Arsenal	Newcastle Utd	Premier League	0	0	2023-01-03
+171	Manchester Utd	Bournemouth	Premier League	3	0	2023-01-03
+172	Southampton	Nott'ham Forest	Premier League	0	1	2023-01-04
+173	Leeds United	West Ham	Premier League	2	2	2023-01-04
+174	Aston Villa	Wolves	Premier League	1	1	2023-01-04
+175	Crystal Palace	Tottenham	Premier League	0	4	2023-01-04
+176	Chelsea	Manchester City	Premier League	0	1	2023-01-05
+177	Fulham	Chelsea	Premier League	2	1	2023-01-12
+178	Aston Villa	Leeds United	Premier League	2	1	2023-01-13
+179	Manchester Utd	Manchester City	Premier League	2	1	2023-01-14
+180	Everton	Southampton	Premier League	1	2	2023-01-14
+181	Wolves	West Ham	Premier League	1	0	2023-01-14
+182	Nott'ham Forest	Leicester City	Premier League	2	0	2023-01-14
+183	Brighton	Liverpool	Premier League	3	0	2023-01-14
+184	Brentford	Bournemouth	Premier League	2	0	2023-01-14
+185	Chelsea	Crystal Palace	Premier League	1	0	2023-01-15
+186	Newcastle Utd	Fulham	Premier League	1	0	2023-01-15
+187	Tottenham	Arsenal	Premier League	0	2	2023-01-15
+188	Crystal Palace	Manchester Utd	Premier League	1	1	2023-01-18
+189	Manchester City	Tottenham	Premier League	4	2	2023-01-19
+190	Liverpool	Chelsea	Premier League	0	0	2023-01-21
+191	Bournemouth	Nott'ham Forest	Premier League	1	1	2023-01-21
+192	Southampton	Aston Villa	Premier League	0	1	2023-01-21
+193	Leicester City	Brighton	Premier League	2	2	2023-01-21
+194	West Ham	Everton	Premier League	2	0	2023-01-21
+195	Crystal Palace	Newcastle Utd	Premier League	0	0	2023-01-21
+196	Manchester City	Wolves	Premier League	3	0	2023-01-22
+197	Leeds United	Brentford	Premier League	0	0	2023-01-22
+198	Arsenal	Manchester Utd	Premier League	3	2	2023-01-22
+199	Fulham	Tottenham	Premier League	0	1	2023-01-23
+200	Chelsea	Fulham	Premier League	0	0	2023-02-03
+201	Everton	Arsenal	Premier League	1	0	2023-02-04
+202	Aston Villa	Leicester City	Premier League	2	4	2023-02-04
+203	Wolves	Liverpool	Premier League	3	0	2023-02-04
+204	Manchester Utd	Crystal Palace	Premier League	2	1	2023-02-04
+205	Brighton	Bournemouth	Premier League	1	0	2023-02-04
+206	Brentford	Southampton	Premier League	3	0	2023-02-04
+207	Newcastle Utd	West Ham	Premier League	1	1	2023-02-04
+208	Nott'ham Forest	Leeds United	Premier League	1	0	2023-02-05
+209	Tottenham	Manchester City	Premier League	1	0	2023-02-05
+210	Manchester Utd	Leeds United	Premier League	2	2	2023-02-08
+211	West Ham	Chelsea	Premier League	1	1	2023-02-11
+212	Leicester City	Tottenham	Premier League	4	1	2023-02-11
+213	Crystal Palace	Brighton	Premier League	1	1	2023-02-11
+214	Arsenal	Brentford	Premier League	1	1	2023-02-11
+215	Southampton	Wolves	Premier League	1	2	2023-02-11
+216	Fulham	Nott'ham Forest	Premier League	2	0	2023-02-11
+217	Bournemouth	Newcastle Utd	Premier League	1	1	2023-02-11
+218	Leeds United	Manchester Utd	Premier League	0	2	2023-02-12
+219	Manchester City	Aston Villa	Premier League	3	1	2023-02-12
+220	Liverpool	Everton	Premier League	2	0	2023-02-13
+221	Arsenal	Manchester City	Premier League	1	3	2023-02-15
+222	Aston Villa	Arsenal	Premier League	2	4	2023-02-18
+223	Brighton	Fulham	Premier League	0	1	2023-02-18
+224	Nott'ham Forest	Manchester City	Premier League	1	1	2023-02-18
+225	Chelsea	Southampton	Premier League	0	1	2023-02-18
+226	Everton	Leeds United	Premier League	1	0	2023-02-18
+227	Wolves	Bournemouth	Premier League	0	1	2023-02-18
+228	Brentford	Crystal Palace	Premier League	1	1	2023-02-18
+229	Newcastle Utd	Liverpool	Premier League	0	2	2023-02-18
+230	Manchester Utd	Leicester City	Premier League	3	0	2023-02-19
+231	Tottenham	West Ham	Premier League	2	0	2023-02-19
+232	Fulham	Wolves	Premier League	1	1	2023-02-24
+233	Leicester City	Arsenal	Premier League	0	1	2023-02-25
+234	Everton	Aston Villa	Premier League	0	2	2023-02-25
+235	West Ham	Nott'ham Forest	Premier League	4	0	2023-02-25
+236	Leeds United	Southampton	Premier League	1	0	2023-02-25
+237	Bournemouth	Manchester City	Premier League	1	4	2023-02-25
+238	Crystal Palace	Liverpool	Premier League	0	0	2023-02-25
+239	Tottenham	Chelsea	Premier League	2	0	2023-02-26
+240	Arsenal	Everton	Premier League	4	0	2023-03-01
+241	Liverpool	Wolves	Premier League	2	0	2023-03-01
+242	Manchester City	Newcastle Utd	Premier League	2	0	2023-03-04
+243	Arsenal	Bournemouth	Premier League	3	2	2023-03-04
+244	Aston Villa	Crystal Palace	Premier League	1	0	2023-03-04
+245	Chelsea	Leeds United	Premier League	1	0	2023-03-04
+246	Brighton	West Ham	Premier League	4	0	2023-03-04
+247	Wolves	Tottenham	Premier League	1	0	2023-03-04
+248	Southampton	Leicester City	Premier League	1	0	2023-03-04
+249	Nott'ham Forest	Everton	Premier League	2	2	2023-03-05
+250	Liverpool	Manchester Utd	Premier League	7	0	2023-03-05
+251	Brentford	Fulham	Premier League	3	2	2023-03-06
+252	Bournemouth	Liverpool	Premier League	1	0	2023-03-11
+253	Leeds United	Brighton	Premier League	2	2	2023-03-11
+254	Everton	Brentford	Premier League	1	0	2023-03-11
+255	Leicester City	Chelsea	Premier League	1	3	2023-03-11
+256	Tottenham	Nott'ham Forest	Premier League	3	1	2023-03-11
+257	Crystal Palace	Manchester City	Premier League	0	1	2023-03-11
+258	Manchester Utd	Southampton	Premier League	0	0	2023-03-12
+259	Fulham	Arsenal	Premier League	0	3	2023-03-12
+260	West Ham	Aston Villa	Premier League	1	1	2023-03-12
+261	Newcastle Utd	Wolves	Premier League	2	1	2023-03-12
+262	Southampton	Brentford	Premier League	0	2	2023-03-15
+263	Brighton	Crystal Palace	Premier League	1	0	2023-03-15
+264	Nott'ham Forest	Newcastle Utd	Premier League	1	2	2023-03-17
+265	Wolves	Leeds United	Premier League	2	4	2023-03-18
+266	Brentford	Leicester City	Premier League	1	1	2023-03-18
+267	Aston Villa	Bournemouth	Premier League	3	0	2023-03-18
+268	Southampton	Tottenham	Premier League	3	3	2023-03-18
+269	Chelsea	Everton	Premier League	2	2	2023-03-18
+270	Arsenal	Crystal Palace	Premier League	4	1	2023-03-19
+271	Manchester City	Liverpool	Premier League	4	1	2023-04-01
+272	Arsenal	Leeds United	Premier League	4	1	2023-04-01
+273	Nott'ham Forest	Wolves	Premier League	1	1	2023-04-01
+274	Brighton	Brentford	Premier League	3	3	2023-04-01
+275	Crystal Palace	Leicester City	Premier League	2	1	2023-04-01
+276	Bournemouth	Fulham	Premier League	2	1	2023-04-01
+277	Chelsea	Aston Villa	Premier League	0	2	2023-04-01
+278	West Ham	Southampton	Premier League	1	0	2023-04-02
+279	Newcastle Utd	Manchester Utd	Premier League	2	0	2023-04-02
+280	Everton	Tottenham	Premier League	1	1	2023-04-03
+281	Leeds United	Nott'ham Forest	Premier League	2	1	2023-04-04
+282	Bournemouth	Brighton	Premier League	0	2	2023-04-04
+283	Leicester City	Aston Villa	Premier League	1	2	2023-04-04
+284	Chelsea	Liverpool	Premier League	0	0	2023-04-04
+285	Manchester Utd	Brentford	Premier League	1	0	2023-04-05
+286	West Ham	Newcastle Utd	Premier League	1	5	2023-04-05
+287	Manchester Utd	Everton	Premier League	2	0	2023-04-08
+288	Fulham	West Ham	Premier League	0	1	2023-04-08
+289	Aston Villa	Nott'ham Forest	Premier League	2	0	2023-04-08
+290	Leicester City	Bournemouth	Premier League	0	1	2023-04-08
+291	Brentford	Newcastle Utd	Premier League	1	2	2023-04-08
+292	Wolves	Chelsea	Premier League	1	0	2023-04-08
+293	Tottenham	Brighton	Premier League	2	1	2023-04-08
+294	Southampton	Manchester City	Premier League	1	4	2023-04-08
+295	Leeds United	Crystal Palace	Premier League	1	5	2023-04-09
+296	Liverpool	Arsenal	Premier League	2	2	2023-04-09
+297	Aston Villa	Newcastle Utd	Premier League	3	0	2023-04-15
+298	Chelsea	Brighton	Premier League	1	2	2023-04-15
+299	Southampton	Crystal Palace	Premier League	0	2	2023-04-15
+300	Wolves	Brentford	Premier League	2	0	2023-04-15
+301	Tottenham	Bournemouth	Premier League	2	3	2023-04-15
+302	Everton	Fulham	Premier League	1	3	2023-04-15
+303	Manchester City	Leicester City	Premier League	3	1	2023-04-15
+304	West Ham	Arsenal	Premier League	2	2	2023-04-16
+305	Nott'ham Forest	Manchester Utd	Premier League	0	2	2023-04-16
+306	Leeds United	Liverpool	Premier League	1	6	2023-04-17
+307	Arsenal	Southampton	Premier League	3	3	2023-04-21
+308	Fulham	Leeds United	Premier League	2	1	2023-04-22
+309	Crystal Palace	Everton	Premier League	0	0	2023-04-22
+310	Brentford	Aston Villa	Premier League	1	1	2023-04-22
+311	Liverpool	Nott'ham Forest	Premier League	3	2	2023-04-22
+312	Leicester City	Wolves	Premier League	2	1	2023-04-22
+313	Bournemouth	West Ham	Premier League	0	4	2023-04-23
+314	Newcastle Utd	Tottenham	Premier League	6	1	2023-04-23
+315	Wolves	Crystal Palace	Premier League	2	0	2023-04-25
+316	Aston Villa	Fulham	Premier League	1	0	2023-04-25
+317	Leeds United	Leicester City	Premier League	1	1	2023-04-25
+318	Nott'ham Forest	Brighton	Premier League	3	1	2023-04-26
+319	Chelsea	Brentford	Premier League	0	2	2023-04-26
+320	West Ham	Liverpool	Premier League	1	2	2023-04-26
+321	Manchester City	Arsenal	Premier League	4	1	2023-04-26
+322	Everton	Newcastle Utd	Premier League	1	4	2023-04-27
+323	Southampton	Bournemouth	Premier League	0	1	2023-04-27
+324	Tottenham	Manchester Utd	Premier League	2	2	2023-04-27
+325	Crystal Palace	West Ham	Premier League	4	3	2023-04-29
+326	Brighton	Wolves	Premier League	6	0	2023-04-29
+327	Brentford	Nott'ham Forest	Premier League	2	1	2023-04-29
+328	Manchester Utd	Aston Villa	Premier League	1	0	2023-04-30
+329	Bournemouth	Leeds United	Premier League	4	1	2023-04-30
+330	Newcastle Utd	Southampton	Premier League	3	1	2023-04-30
+331	Fulham	Manchester City	Premier League	1	2	2023-04-30
+332	Liverpool	Tottenham	Premier League	4	3	2023-04-30
+333	Leicester City	Everton	Premier League	2	2	2023-05-01
+334	Arsenal	Chelsea	Premier League	3	1	2023-05-02
+335	Liverpool	Fulham	Premier League	1	0	2023-05-03
+336	Manchester City	West Ham	Premier League	3	0	2023-05-03
+337	Brighton	Manchester Utd	Premier League	1	0	2023-05-04
+338	Tottenham	Crystal Palace	Premier League	1	0	2023-05-06
+339	Wolves	Aston Villa	Premier League	1	0	2023-05-06
+340	Bournemouth	Chelsea	Premier League	1	3	2023-05-06
+341	Manchester City	Leeds United	Premier League	2	1	2023-05-06
+342	Liverpool	Brentford	Premier League	1	0	2023-05-06
+343	Newcastle Utd	Arsenal	Premier League	0	2	2023-05-07
+344	West Ham	Manchester Utd	Premier League	1	0	2023-05-07
+345	Fulham	Leicester City	Premier League	5	3	2023-05-08
+346	Brighton	Everton	Premier League	1	5	2023-05-08
+347	Nott'ham Forest	Southampton	Premier League	4	3	2023-05-08
+348	Leeds United	Newcastle Utd	Premier League	2	2	2023-05-13
+349	Aston Villa	Tottenham	Premier League	2	1	2023-05-13
+350	Chelsea	Nott'ham Forest	Premier League	2	2	2023-05-13
+351	Crystal Palace	Bournemouth	Premier League	2	0	2023-05-13
+352	Southampton	Fulham	Premier League	0	2	2023-05-13
+353	Manchester Utd	Wolves	Premier League	2	0	2023-05-13
+354	Everton	Manchester City	Premier League	0	3	2023-05-14
+355	Brentford	West Ham	Premier League	2	0	2023-05-14
+356	Arsenal	Brighton	Premier League	0	3	2023-05-14
+357	Leicester City	Liverpool	Premier League	0	3	2023-05-15
+358	Newcastle Utd	Brighton	Premier League	4	1	2023-05-18
+359	Tottenham	Brentford	Premier League	1	3	2023-05-20
+360	Liverpool	Aston Villa	Premier League	1	1	2023-05-20
+361	Fulham	Crystal Palace	Premier League	2	2	2023-05-20
+362	Bournemouth	Manchester Utd	Premier League	0	1	2023-05-20
+363	Wolves	Everton	Premier League	1	1	2023-05-20
+364	Nott'ham Forest	Arsenal	Premier League	1	0	2023-05-20
+365	West Ham	Leeds United	Premier League	3	1	2023-05-21
+366	Brighton	Southampton	Premier League	3	1	2023-05-21
+367	Manchester City	Chelsea	Premier League	1	0	2023-05-21
+368	Newcastle Utd	Leicester City	Premier League	0	0	2023-05-22
+369	Brighton	Manchester City	Premier League	1	1	2023-05-24
+370	Manchester Utd	Chelsea	Premier League	4	1	2023-05-25
+371	Crystal Palace	Nott'ham Forest	Premier League	1	1	2023-05-28
+372	Chelsea	Newcastle Utd	Premier League	1	1	2023-05-28
+373	Manchester Utd	Fulham	Premier League	2	1	2023-05-28
+374	Arsenal	Wolves	Premier League	5	0	2023-05-28
+375	Southampton	Liverpool	Premier League	4	4	2023-05-28
+376	Everton	Bournemouth	Premier League	1	0	2023-05-28
+377	Leicester City	West Ham	Premier League	2	1	2023-05-28
+378	Aston Villa	Brighton	Premier League	2	1	2023-05-28
+379	Leeds United	Tottenham	Premier League	1	4	2023-05-28
+380	Brentford	Manchester City	Premier League	1	0	2023-05-28
+\.
+
+
+--
+-- Data for Name: player; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.player (p_id, p_name, p_agent, p_dob, p_yellowcards, p_redcards, p_position, p_fouls, p_interceptions, p_height, p_weight, p_isavailable, p_passcompletion, p_salary, p_citizenof, p_team, p_goalsscored) FROM stdin;
+1133	Casemiro	Alex Jones	1990-09-25	0	0	Midfielder	20	10	191	69	t	0.8	281012	Brazil	Leeds United	2
+1014	Michail Antonio	John Williams	2003-07-25	0	0	Forward	30	9	203	95	t	0.74	1443417	Jamaica	Everton	49
+1015	Antony	John Rodriguez	1999-06-01	2	2	Forward	8	0	203	66	t	0.79	948509	Brazil	Wolves	28
+1016	Paul Appiah	Alex Garcia	1991-12-18	4	0	Midfielder	11	7	184	97	t	0.71	2792402	England	Newcastle Utd	7
+1017	Keenan Appiah-Forson	Emma Garcia	1985-08-10	4	0	Midfielder	31	9	192	67	t	0.7000000000000001	1676559	England	Wolves	2
+1018	Billy Arce	Noah Miller	2000-12-06	4	0	Midfielder	12	8	179	61	t	0.72	2345578	Ecuador	Wolves	2
+1019	Cameron Archer	Sophia Martinez	1998-06-11	1	2	Forward	32	3	210	83	t	0.79	2537286	England	Southampton	24
+1020	Joe Aribo	Noah Smith	1985-09-08	3	1	Midfielder	14	5	200	76	t	0.75	1272524	Nigeria	Manchester City	1
+1021	Harry Arter	Michael Miller	1990-11-20	5	0	Midfielder	34	3	173	89	t	0.73	2987044	Ireland	Tottenham	8
+1022	Arthur	James Brown	1986-08-06	3	0	Midfielder	5	8	198	69	t	0.75	350824	Brazil	Brentford	1
+1023	Harrison Ashby	Emma Williams	1999-06-09	1	1	Defender	3	5	188	95	t	0.71	2735554	Scotland	West Ham	6
+1024	Ryan Astley	Maria Smith	1997-05-19	1	0	Defender	12	7	203	69	t	0.74	1477547	Wales	Bournemouth	3
+1025	Pierre-Emerick Aubameyang	James Brown	1996-11-02	0	1	Forward	27	3	203	57	t	0.71	2811413	Gabon	Newcastle Utd	32
+1026	Ludwig Augustinsson	Olivia Brown	2002-09-03	5	0	Defender	8	10	194	72	t	0.7000000000000001	1341891	Sweden	Brighton	1
+1027	Sèrge Aurier	Liam Rodriguez	1992-01-26	0	0	Defender	39	4	174	78	t	0.71	2713191	Cote D’Ivoire	Brentford	8
+1028	Zach Awe	Maria Martinez	1997-01-31	0	2	Defender	7	6	186	71	t	0.78	2763876	England	Aston Villa	10
+1029	Taiwo Awoniyi	Liam Miller	1999-01-19	1	0	Forward	27	0	173	90	t	0.78	2713753	Nigeria	Manchester Utd	49
+1030	Yasin Ayari	Olivia Johnson	1986-11-22	1	0	Midfielder	19	1	173	86	t	0.75	2239991	Sweden	Manchester Utd	8
+1031	Jordan Ayew	Alex Brown	1992-02-14	2	0	Forward	27	3	183	86	t	0.8	2483839	Ghana	Brighton	29
+1032	Luke Ayling	James Rodriguez	1992-05-01	4	0	Defender	4	5	181	64	t	0.74	2386366	England	Wolves	1
+1033	Miguel Azeez	Liam Davis	1995-12-07	2	0	Midfielder	20	7	199	82	t	0.75	78144	England	Crystal Palace	5
+1034	César Azpilicueta	Sophia Rodriguez	2002-04-10	5	0	Defender	7	9	199	88	t	0.75	1435952	Spain	Southampton	6
+1035	Abdul Baba	Alex Johnson	1999-01-10	1	1	Defender	40	4	169	65	t	0.76	1480042	Ghana	Leicester City	4
+1036	Baba Fernandes	Noah Smith	1987-11-10	1	0	Defender	16	4	205	63	t	0.74	1069791	Guinea-Bissau	Newcastle Utd	8
+1037	Finley Back	Olivia Miller	1992-01-09	0	1	Defender	11	10	184	84	t	0.77	1340838	England	Brentford	6
+1038	Loïc Badé	Sophia Smith	1988-02-03	1	0	Defender	39	10	205	55	t	0.79	373983	France	Bournemouth	5
+1039	Benoît Badiashile	James Brown	1986-04-17	1	0	Defender	35	4	169	66	t	0.73	2609531	France	Everton	6
+1040	Leon Bailey	Emma Williams	1984-11-01	3	0	Midfielder	20	8	201	58	t	0.76	2596520	Jamaica	Manchester City	7
+1041	Eric Bailly	James Smith	1996-08-05	0	0	Defender	9	10	173	76	t	0.72	2691305	Cote D’Ivoire	Everton	5
+1042	Stefan Bajcetic	Noah Johnson	1991-12-01	2	0	Midfielder	28	3	174	88	t	0.75	1440354	Spain	Bournemouth	3
+1043	Tiémoué Bakayoko	Liam Brown	1992-12-11	4	0	Midfielder	33	8	187	96	t	0.78	2188052	France	Manchester City	10
+1044	Lewis Baker	Liam Johnson	2002-11-20	0	0	Midfielder	5	0	181	88	t	0.7000000000000001	2881934	England	Wolves	1
+1045	James Balagizi	James Brown	1993-04-17	2	1	Midfielder	10	7	172	70	t	0.74	1455497	England	Brighton	8
+1046	Dom Ballard	Olivia Jones	2000-10-19	3	0	Forward	6	9	194	68	t	0.71	633581	England	Newcastle Utd	31
+1047	Kofi Balmer	Alex Smith	1988-02-14	3	0	Defender	22	5	190	79	t	0.75	897960	Northern Ireland	Everton	2
+1048	Folarin Balogun	Alex Brown	1987-12-07	2	2	Forward	26	7	196	60	t	0.72	895802	United States	Brentford	24
+1049	Tudor Baluta	Olivia Miller	1996-07-17	0	0	Defender	18	5	170	96	t	0.75	670290	Romania	Chelsea	0
+1050	Patrick Bamford	Michael Miller	1988-05-16	0	2	Forward	40	5	185	90	t	0.7000000000000001	1651275	England	Southampton	45
+1051	Mauro Bandeira	Emma Jones	1993-09-25	4	0	Midfielder	6	3	184	73	t	0.77	402714	Portugal	Brentford	0
+1052	Scott Banks	Michael Johnson	1989-03-21	2	0	Midfielder	12	2	208	89	t	0.79	193133	Scotland	Leeds United	1
+1053	Shandon Baptiste	John Rodriguez	2002-02-09	5	1	Midfielder	27	5	176	82	t	0.76	2977116	Grenada	Brighton	2
+1054	Ross Barkley	Sophia Johnson	2001-11-21	3	1	Midfielder	16	9	175	83	t	0.73	897765	England	Wolves	8
+1055	Harvey Barnes	Liam Johnson	1989-07-25	2	2	Midfielder	18	4	189	55	t	0.77	1662407	England	Tottenham	5
+1056	Louie Barry	Michael Rodriguez	2003-06-23	1	0	Forward	31	1	194	87	t	0.72	1807653	England	Bournemouth	45
+1057	Ryan Bartley	Noah Miller	1999-08-03	2	1	Defender	3	9	207	89	t	0.75	357092	England	Leicester City	8
+1058	Lewis Bate	Emma Johnson	1987-06-19	0	0	Midfielder	11	6	203	81	t	0.74	796624	England	Liverpool	10
+1059	Michy Batshuayi	Alex Smith	1992-08-02	4	0	Forward	33	6	174	97	t	0.7000000000000001	1378174	Belgium	Manchester City	20
+1060	Mads Bech	John Rodriguez	2001-12-13	3	1	Defender	27	1	179	77	t	0.77	1467290	Denmark	Leicester City	4
+1061	Owen Beck	Maria Johnson	1992-03-25	2	0	Defender	33	3	171	54	t	0.77	1481174	Wales	Chelsea	3
+1062	Jan Bednarek	Michael Smith	1993-11-21	0	0	Defender	7	1	182	60	t	0.71	944834	Poland	Manchester Utd	0
+1063	Armel Bella-Kotchap	Emma Williams	1987-08-29	5	0	Defender	13	1	206	64	t	0.74	229473	Germany	Chelsea	1
+1064	Héctor Bellerín	Noah Jones	2004-02-07	4	1	Defender	8	0	209	66	t	0.76	1481079	Spain	Newcastle Utd	10
+1065	Benjamin Mendy	Michael Brown	1991-02-20	5	0	Defender	22	5	176	58	t	0.77	1271876	France	Wolves	8
+1066	Filip Benkovic	James Miller	2001-02-15	3	0	Defender	40	9	190	92	t	0.75	1385079	Croatia	West Ham	8
+1067	Rhys Bennett	Sophia Brown	1993-11-13	0	0	Defender	6	9	199	77	t	0.71	1468743	England	Liverpool	2
+1068	Saïd Benrahma	Maria Martinez	1987-10-09	3	2	Forward	26	8	169	97	t	0.79	1436807	Algeria	Manchester Utd	29
+1069	Rodrigo Bentancur	Olivia Garcia	1989-10-17	2	0	Midfielder	12	0	177	90	t	0.73	1241261	Uruguay	Nott'ham Forest	4
+1070	Christian Benteke	Sophia Miller	1988-07-14	3	0	Forward	36	0	199	83	t	0.74	1623667	Belgium	Chelsea	30
+1071	Steven Bergwijn	Noah Davis	2004-07-13	5	0	Forward	39	5	202	75	t	0.73	932053	Netherlands	Brighton	21
+1072	Di'Shon Bernard	James Smith	2004-11-06	4	0	Defender	18	7	200	99	t	0.79	880456	Jamaica	Tottenham	8
+1073	Bernardo Silva	James Martinez	1987-05-04	4	0	Midfielder	9	8	174	91	t	0.77	2758898	Portugal	Wolves	5
+1074	Ryan Bertrand	Olivia Williams	1996-02-02	2	0	Defender	9	5	193	82	t	0.72	893705	England	Southampton	4
+1075	Owen Bevan	James Davis	1989-04-25	0	2	Defender	13	10	201	65	t	0.71	2170166	Wales	West Ham	1
+1076	Giulian Biancone	John Jones	2003-10-22	3	0	Defender	26	3	194	69	t	0.77	2242314	France	Bournemouth	7
+1077	Mads Bidstrup	Maria Martinez	2000-10-15	4	0	Midfielder	14	5	178	98	t	0.76	752457	Denmark	Bournemouth	6
+1078	Mika Biereth	Noah Brown	1997-04-18	1	1	Forward	15	0	209	66	t	0.75	978771	Denmark	Brentford	49
+1079	Philip Billing	James Rodriguez	1984-10-19	4	2	Midfielder	40	10	195	56	t	0.76	1157797	Denmark	Tottenham	9
+1080	Yves Bissouma	Michael Davis	1992-11-24	0	0	Midfielder	9	1	169	80	t	0.77	1014506	Mali	Bournemouth	0
+1081	Harvey Blair	Olivia Davis	1996-03-30	2	0	Forward	14	3	173	59	t	0.78	2239621	England	Liverpool	31
+1082	Malachi Boateng	Liam Smith	1990-09-06	3	0	Midfielder	0	8	188	92	t	0.8	2834012	England	Manchester Utd	9
+1083	Oscar Bobb	Olivia Johnson	2001-08-21	0	0	Midfielder	30	10	182	55	t	0.77	2287218	Norway	Wolves	7
+1084	Lamare Bogarde	Alex Davis	2003-06-23	1	0	Defender	15	7	202	94	t	0.7000000000000001	743324	Netherlands	Chelsea	4
+1085	Mateusz Bogusz	James Rodriguez	1984-09-24	3	2	Midfielder	26	5	210	82	t	0.8	1338566	Poland	Manchester City	2
+1086	Bendegúz Bolla	Noah Jones	1995-06-11	5	0	Defender	0	1	188	57	t	0.72	192275	Hungary	Leicester City	7
+1087	Willy-Arnaud Boly	Maria Brown	1997-01-10	4	0	Defender	35	8	192	98	t	0.8	1122478	Cote D’Ivoire	Tottenham	1
+1088	Gaëtan Bong	Maria Miller	2002-06-21	3	0	Defender	4	10	190	76	t	0.77	597828	Cameroon	Leeds United	6
+1089	Sven Botman	Sophia Williams	1993-09-30	1	0	Defender	33	0	178	83	t	0.8	1928179	Netherlands	Tottenham	9
+1090	Jamie Bowden	Sophia Garcia	2004-10-24	5	2	Midfielder	9	5	187	90	t	0.78	2592558	Ireland	Tottenham	3
+1091	Jarrod Bowen	Michael Johnson	2002-12-10	0	0	Forward	6	4	173	87	t	0.76	329976	England	Brighton	35
+1092	Josh Bowler	Alex Miller	1988-12-20	1	0	Midfielder	5	0	204	99	t	0.77	2201077	England	Manchester City	4
+1093	Conor Bradley	Alex Williams	2005-01-17	0	0	Defender	23	4	196	79	t	0.79	872280	Northern Ireland	Nott'ham Forest	5
+1094	Robert Brady	Maria Martinez	2004-11-25	1	0	Midfielder	6	9	185	61	t	0.75	638151	Ireland	Brighton	6
+1095	Jarrad Branthwaite	John Davis	1991-06-13	1	0	Defender	5	7	178	56	t	0.72	1323061	England	Fulham	0
+1096	Sammy Braybrooke	Sophia Williams	1995-07-05	5	1	Midfielder	9	3	201	77	t	0.76	1762132	England	Crystal Palace	4
+1097	James Bree	Olivia Martinez	1998-02-05	3	1	Defender	18	6	191	55	t	0.77	570123	England	Nott'ham Forest	5
+1098	Nathan Broadhead	James Smith	1985-10-05	5	0	Forward	24	9	177	87	t	0.71	573169	Wales	Leicester City	20
+1099	Armando Broja	Liam Garcia	1996-02-25	1	1	Forward	40	8	184	70	t	0.7000000000000001	2532296	Albania	Leicester City	30
+1100	Josh Brooking	John Johnson	2005-01-09	3	0	Defender	15	7	183	74	t	0.71	173193	England	Southampton	6
+1101	David Brooks	Emma Garcia	1985-05-12	1	0	Midfielder	24	2	176	73	t	0.77	952725	Wales	Arsenal	3
+1102	Bruno Fernandes	Sophia Rodriguez	1997-09-06	0	0	Midfielder	27	3	169	97	t	0.75	2745945	Portugal	Manchester Utd	9
+1103	Bruno Guimarães	Alex Davis	1987-10-31	1	1	Midfielder	30	5	201	97	t	0.71	2770920	Brazil	Newcastle Utd	6
+1104	Bruno Jordão	Emma Miller	1997-02-20	2	0	Midfielder	31	10	193	60	t	0.73	2185088	Portugal	Leicester City	1
+1105	Lewis Brunt	Emma Jones	1984-11-22	3	0	Defender	19	1	189	93	t	0.73	2971109	England	Wolves	4
+1106	Joe Bryan	James Williams	2004-06-05	3	0	Defender	20	10	182	85	t	0.8	1550605	England	Fulham	4
+1107	Emiliano Buendía	Michael Martinez	2001-12-30	2	0	Midfielder	35	0	198	54	t	0.76	965290	Argentina	Leicester City	8
+1108	Facundo Buonanotte	Michael Martinez	2001-09-16	4	0	Midfielder	37	8	185	70	t	0.7000000000000001	361847	Argentina	Liverpool	7
+1109	Dan Burn	John Davis	1990-07-29	5	1	Defender	39	3	182	68	t	0.75	1495376	England	Arsenal	3
+1110	Finley Burns	Olivia Martinez	1988-12-18	4	0	Defender	35	5	175	85	t	0.74	2926829	England	Aston Villa	10
+1111	Mason Burstow	Maria Miller	2000-09-03	5	0	Forward	4	8	174	91	t	0.8	348420	England	Crystal Palace	22
+1112	Nathan Butler-Oyedeji	Maria Johnson	2001-08-01	3	0	Forward	10	10	185	68	t	0.76	2490968	England	Chelsea	34
+1113	Maliq Cadogan	Liam Miller	2000-05-26	3	0	Midfielder	34	4	172	85	t	0.76	2492175	England	Everton	1
+1114	Cafú	Liam Davis	1985-05-06	0	1	Midfielder	34	2	183	65	t	0.8	716123	Portugal	Brentford	6
+1115	Gary Cahill	Emma Brown	1996-06-22	2	2	Defender	16	5	203	82	t	0.8	1024975	England	Chelsea	2
+1116	Moisés Caicedo	Michael Smith	1995-05-07	3	1	Midfielder	23	6	204	96	t	0.78	137803	Ecuador	Tottenham	2
+1117	Jake Cain	Michael Davis	1992-12-08	3	0	Midfielder	39	9	207	85	t	0.72	522277	England	Chelsea	10
+1118	Tom Cairney	James Jones	1997-10-24	5	0	Midfielder	28	5	197	95	t	0.7000000000000001	138757	Scotland	Tottenham	0
+1119	Duje Caleta-Car	Liam Martinez	1984-05-09	2	0	Defender	0	7	192	61	t	0.8	2395930	Croatia	Chelsea	8
+1120	Callum Wright	James Jones	1992-09-12	2	0	Midfielder	2	9	178	63	t	0.76	2503360	England	Manchester City	1
+1121	Dominic Calvert-Lewin	John Garcia	1985-09-21	2	0	Forward	6	10	175	70	t	0.7000000000000001	305723	England	Everton	24
+1122	Leonardo Campana	John Jones	1992-04-20	2	1	Forward	14	5	174	87	t	0.79	1371141	Ecuador	Fulham	39
+1123	Vontae Campbell	Maria Garcia	1998-01-09	1	1	Defender	5	6	178	86	t	0.75	1230416	England	Everton	3
+1124	Thomas Cannon	Maria Brown	1997-09-29	3	0	Forward	29	10	172	81	t	0.77	2783428	Ireland	Brighton	47
+1125	Sergi Canós	Emma Johnson	1996-05-09	3	0	Midfielder	26	6	188	93	t	0.78	2200293	Spain	Brighton	0
+1126	Todd Cantwell	John Brown	2003-08-07	5	0	Midfielder	37	0	173	78	t	0.72	211751	England	West Ham	7
+1127	Cardo Siddik	Maria Miller	1988-04-07	1	0	Defender	25	2	209	66	t	0.72	2185653	Iraq	Brighton	7
+1128	Carlos Forbs	Liam Garcia	2000-03-10	1	0	Forward	40	9	174	82	t	0.71	2554239	Portugal	Aston Villa	26
+1129	Carlos Vinícius	James Davis	1993-05-13	3	0	Forward	20	6	171	78	t	0.79	1332947	Brazil	Aston Villa	29
+1130	Álvaro Carreras	Emma Garcia	2003-01-10	3	0	Defender	11	8	170	62	t	0.77	2181838	Spain	Brighton	6
+1131	Cameron Carter-Vickers	Alex Martinez	2000-09-13	5	0	Defender	9	1	178	60	t	0.7000000000000001	1470520	United States	Manchester Utd	4
+1132	Cesare Casadei	John Miller	1990-03-30	1	0	Midfielder	15	9	206	88	t	0.77	992014	Italy	Manchester City	3
+1134	Kaelan Casey	Olivia Williams	1992-02-29	3	0	Defender	19	9	186	78	t	0.71	1857276	England	Newcastle Utd	3
+1135	Matty Cash	Sophia Martinez	1993-11-21	0	0	Defender	36	1	201	97	t	0.71	798425	Poland	Bournemouth	3
+1136	Timothy Castagne	Liam Brown	1996-11-29	2	0	Defender	27	0	200	82	t	0.79	1401509	Belgium	Manchester Utd	1
+1137	Edinson Cavani	Michael Brown	2005-05-16	4	0	Forward	36	1	203	97	t	0.77	1132013	Uruguay	Southampton	24
+1138	Cédric Soares	Olivia Brown	1989-06-24	3	0	Defender	1	3	210	68	t	0.72	440513	Portugal	Aston Villa	1
+1139	Kallum Cesay	Maria Miller	2000-03-30	0	0	Defender	2	2	192	64	t	0.8	2010631	Sierra Leone	Newcastle Utd	10
+1140	Trevoh Chalobah	Olivia Jones	1993-05-16	5	0	Midfielder	38	10	199	82	t	0.79	2848952	England	Manchester City	6
+1141	Calum Chambers	Olivia Garcia	1984-09-16	1	0	Defender	3	4	210	93	t	0.77	727313	England	Arsenal	3
+1142	Shea Charles	Liam Rodriguez	1994-11-25	1	0	Midfielder	8	6	181	63	t	0.71	622377	Northern Ireland	Nott'ham Forest	7
+1143	Charlie Robinson	John Garcia	2000-03-09	3	2	Defender	19	10	210	76	t	0.8	2266014	England	Everton	4
+1144	Kgaogelo Chauke	Michael Martinez	2004-08-12	0	0	Midfielder	5	1	171	70	t	0.79	1331332	England	Wolves	2
+1145	Dan Chesters	Michael Martinez	2001-08-02	1	0	Midfielder	24	10	200	88	t	0.79	841148	England	Wolves	7
+1146	Jeremiah Chilokoa-Mullen	Alex Williams	1985-06-19	4	0	Defender	11	1	184	76	t	0.77	1925018	Scotland	Aston Villa	8
+1147	Ben Chilwell	Olivia Miller	2005-11-26	0	0	Defender	24	8	209	98	t	0.74	2853946	England	Bournemouth	8
+1148	Chiquinho	John Davis	1997-05-02	2	0	Midfielder	20	1	170	83	t	0.79	103203	Portugal	Manchester City	7
+1149	Tahith Chong	Liam Martinez	1991-01-27	5	0	Midfielder	34	1	196	69	t	0.7000000000000001	2991741	Netherlands	Wolves	10
+1150	Hamza Choudhury	Noah Garcia	2003-02-17	1	0	Midfielder	29	2	189	85	t	0.76	1803868	England	Newcastle Utd	0
+1151	Ben Chrisene	James Johnson	1999-05-17	1	2	Defender	35	5	201	54	t	0.78	1360917	England	Leicester City	6
+1152	Andreas Christensen	Noah Martinez	1996-08-05	2	0	Defender	22	7	196	66	t	0.78	2547734	Denmark	Arsenal	9
+1153	Christian Marques	Michael Garcia	1989-01-11	4	0	Defender	0	10	191	58	t	0.76	163095	Portugal	Tottenham	3
+1154	Ryan Christie	Olivia Johnson	1986-04-27	4	2	Midfielder	40	2	170	65	t	0.74	2559674	Scotland	Wolves	1
+1155	Carney Chukwuemeka	Emma Martinez	1989-01-24	0	2	Midfielder	4	9	181	80	t	0.75	1454404	England	Arsenal	1
+1156	Catalin Cîrjan	Michael Jones	1988-06-24	0	0	Midfielder	7	7	200	58	t	0.73	1288423	Romania	Tottenham	2
+1157	CJ Egan-Riley	Sophia Johnson	2000-06-16	2	2	Defender	32	7	190	88	t	0.74	2156227	England	Chelsea	5
+1159	Matt Clarke	Michael Miller	1994-03-17	5	0	Defender	32	5	170	91	t	0.72	2726879	England	Manchester Utd	6
+1160	Leighton Clarkson	Emma Miller	2004-01-21	2	0	Midfielder	36	2	207	58	t	0.76	1462920	England	Bournemouth	6
+1161	Regan Clayton	Liam Martinez	1988-05-18	4	0	Defender	22	4	199	70	t	0.75	1588182	England	Wolves	1
+1162	Nathaniel Clyne	Maria Rodriguez	1996-06-15	3	0	Defender	29	3	199	96	t	0.75	747825	England	Arsenal	9
+1163	Conor Coady	John Smith	2001-04-16	5	0	Defender	22	0	205	68	t	0.71	116249	England	Southampton	7
+1164	Jack Colback	Olivia Rodriguez	1997-09-22	1	0	Midfielder	9	5	205	85	t	0.77	307819	England	Crystal Palace	2
+1165	Séamus Coleman	James Davis	2000-03-26	2	0	Defender	23	0	198	96	t	0.79	2613591	Ireland	Leeds United	4
+1166	Nathan Collins	Emma Rodriguez	1988-08-14	5	0	Defender	19	9	203	71	t	0.78	2495727	Ireland	Liverpool	1
+1167	Levi Colwill	Olivia Garcia	1998-03-04	2	2	Defender	28	0	187	81	t	0.77	1517554	England	Liverpool	6
+1168	Aaron Connolly	Olivia Miller	1991-11-25	4	1	Forward	19	0	186	87	t	0.75	1991990	Ireland	Everton	50
+1169	Lewis Cook	Maria Martinez	2000-06-07	5	1	Midfielder	13	4	206	58	t	0.79	741770	England	Leicester City	8
+1170	Liam Cooper	Michael Rodriguez	1986-08-31	1	0	Defender	34	2	201	80	t	0.71	2784283	Scotland	Manchester City	10
+1171	Theo Corbeanu	John Johnson	1999-12-13	0	0	Forward	25	3	177	57	t	0.74	2858765	Canada	Leeds United	25
+1172	Dominic Corness	Liam Garcia	2003-10-04	5	0	Midfielder	15	1	180	87	t	0.77	1107884	England	Manchester City	0
+1173	Maxwel Cornet	Maria Davis	1995-11-22	5	0	Forward	8	3	188	73	t	0.76	1664236	Cote D’Ivoire	Liverpool	36
+1174	Vladimír Coufal	Maria Martinez	1991-04-03	2	0	Defender	12	4	201	61	t	0.78	783365	Czech Republic	Everton	3
+1175	Conor Coventry	Noah Johnson	1993-03-12	3	0	Midfielder	1	3	196	72	t	0.72	2120570	Ireland	Nott'ham Forest	2
+1176	Brandon Cover	Noah Davis	2000-09-29	1	0	Midfielder	25	1	208	97	t	0.79	1575896	Jamaica	Arsenal	9
+1177	Amario Cozier-Duberry	James Davis	2003-04-08	3	0	Midfielder	3	6	188	92	t	0.7000000000000001	1970919	England	Nott'ham Forest	10
+1178	Michael Craig	Liam Jones	2005-07-18	3	0	Midfielder	30	0	197	75	t	0.78	578904	Scotland	Everton	1
+1179	Tristan Crama	Alex Smith	2004-10-30	4	0	Defender	40	9	175	73	t	0.74	2771622	France	Everton	4
+1180	Charlie Cresswell	Maria Brown	1992-06-11	4	0	Defender	5	1	189	93	t	0.7000000000000001	1868510	England	Aston Villa	0
+1181	Cristiano Ronaldo	James Smith	1994-03-06	3	0	Forward	11	1	203	56	t	0.71	1349241	Portugal	Nott'ham Forest	31
+1183	Luke Cundle	Maria Rodriguez	1984-01-19	0	0	Midfielder	10	3	170	84	t	0.79	2614540	England	Chelsea	6
+1184	Patrick Cutrone	Michael Miller	1989-02-15	4	0	Forward	30	9	205	64	t	0.77	93947	Italy	Manchester Utd	42
+1185	Luciano D'Auria-Henry	Alex Jones	1987-10-19	4	1	Defender	8	10	173	70	t	0.78	110886	England	Leeds United	9
+1186	Michael Dacosta Gonzalez	Olivia Brown	1984-07-17	1	0	Forward	35	9	194	60	t	0.74	177458	Spain	Tottenham	36
+1187	Patson Daka	James Williams	1995-08-02	2	0	Forward	6	5	199	97	t	0.73	2581786	Zambia	Manchester City	38
+1188	Stuart Dallas	Noah Rodriguez	1991-06-14	0	0	Defender	27	4	194	88	t	0.78	751958	Northern Ireland	Manchester City	5
+1189	Mikkel Damsgaard	Michael Smith	2000-02-27	2	0	Midfielder	29	0	180	78	t	0.74	2996578	Denmark	Liverpool	10
+1190	Daniel Podence	Noah Rodriguez	1991-09-23	1	0	Forward	32	8	183	57	t	0.76	2705304	Portugal	Newcastle Utd	31
+1191	Danilo	Michael Brown	1994-10-05	3	0	Midfielder	26	8	175	75	t	0.72	1888524	Brazil	Bournemouth	6
+1192	Arnaut Danjuma	Emma Davis	2001-06-30	2	1	Forward	32	10	195	82	t	0.76	2943765	Netherlands	Crystal Palace	30
+1193	Josh Dasilva	Olivia Johnson	1991-01-19	0	0	Midfielder	7	10	199	92	t	0.78	910453	England	Liverpool	1
+1194	Tom Davies	Liam Martinez	2004-07-01	4	0	Midfielder	34	4	185	57	t	0.74	2981507	England	Liverpool	9
+1195	Keinan Davis	Emma Smith	1986-09-01	2	2	Forward	25	2	185	74	t	0.76	1023142	England	Newcastle Utd	47
+1196	Craig Dawson	John Jones	1988-06-16	5	0	Defender	20	0	197	97	t	0.77	2488573	England	West Ham	8
+1197	Laurens De Bock	Michael Garcia	1993-07-18	1	0	Defender	29	2	201	72	t	0.79	473191	Belgium	Crystal Palace	8
+1198	Lucas De Bolle	Michael Garcia	2000-12-15	4	0	Midfielder	40	5	171	76	t	0.73	2656540	Scotland	Liverpool	1
+1199	Kevin De Bruyne	Michael Rodriguez	1990-11-20	0	2	Midfielder	23	4	186	92	t	0.77	2258968	Belgium	Manchester Utd	0
+1200	Bobby De Cordova-Reid	Noah Davis	1996-12-11	3	0	Forward	26	1	171	63	t	0.72	1069186	Jamaica	Brentford	48
+1201	James Debayo	Alex Williams	1991-07-21	2	0	Defender	1	10	207	97	t	0.7000000000000001	1040869	England	Manchester Utd	4
+1202	Liam Delap	Noah Martinez	2005-01-03	0	0	Forward	0	9	208	69	t	0.72	2839686	England	Liverpool	29
+1203	Fabian Delph	James Rodriguez	1990-05-29	0	0	Midfielder	14	8	187	67	t	0.8	2308583	England	Manchester Utd	8
+1204	Siriki Dembélé	Noah Brown	1988-09-01	0	0	Midfielder	30	1	185	84	t	0.78	1491797	Scotland	Liverpool	7
+1205	Leander Dendoncker	Michael Johnson	2002-07-25	5	0	Midfielder	7	7	208	63	t	0.7000000000000001	2306956	Belgium	Fulham	1
+1206	Halil Dervisoglu	Emma Jones	2002-10-30	1	0	Forward	39	10	183	79	t	0.74	2841608	Turkey	Aston Villa	27
+1207	Alfie Devine	Michael Brown	1991-11-17	4	1	Midfielder	31	9	192	67	t	0.8	915661	England	Manchester Utd	3
+1208	Kiernan Dewsbury-Hall	James Johnson	2005-04-21	2	1	Midfielder	18	5	196	66	t	0.78	1925159	England	Southampton	10
+1209	Amad Diallo	Liam Davis	2001-07-12	2	1	Forward	17	9	209	60	t	0.75	105022	Cote D’Ivoire	Fulham	29
+1210	Luis Díaz	Noah Rodriguez	1990-02-07	2	0	Forward	22	1	188	80	t	0.8	1910990	Colombia	Leeds United	25
+1211	Matthew Dibley-Dias	Sophia Jones	1988-06-01	2	0	Midfielder	32	10	184	55	t	0.74	1132514	New Zealand	Southampton	2
+1212	Tyler Dibling	Olivia Williams	1985-06-04	4	0	Midfielder	0	9	205	72	t	0.76	1861970	England	West Ham	5
+1213	Will Dickson	Olivia Smith	1984-01-30	0	0	Forward	17	4	199	63	t	0.72	1962722	England	Manchester City	21
+1214	Diego Carlos	Olivia Rodriguez	1984-07-04	2	0	Defender	21	6	199	92	t	0.72	882408	Brazil	Arsenal	1
+1215	Diego Costa	Liam Jones	1986-03-05	5	0	Forward	4	4	189	57	t	0.8	515531	Spain	Manchester Utd	26
+1216	Diego Rosa	Emma Johnson	2002-03-16	2	0	Midfielder	19	3	175	56	t	0.71	1062711	Brazil	Tottenham	4
+1217	Eric Dier	John Davis	2000-09-22	4	2	Defender	16	5	203	59	t	0.77	2829822	England	Liverpool	6
+1218	Lucas Digne	Michael Rodriguez	1992-06-08	5	0	Defender	22	1	171	54	t	0.74	2301270	France	Brentford	10
+1219	Diogo Dalot	Alex Davis	2000-05-07	0	0	Defender	18	8	204	94	t	0.73	2044668	Portugal	Leicester City	10
+1220	Diogo Jota	Michael Martinez	2003-08-08	4	0	Forward	14	6	171	87	t	0.79	1068285	Portugal	Arsenal	45
+1221	Diogo Monteiro	Olivia Rodriguez	1999-07-26	3	0	Defender	21	6	190	90	t	0.79	1045567	Portugal	Fulham	7
+1222	Issa Diop	John Davis	2005-10-01	1	0	Defender	34	6	193	59	t	0.72	1816377	France	Crystal Palace	3
+1223	Elijah Dixon-Bonner	Alex Williams	2000-08-21	0	1	Midfielder	2	4	191	64	t	0.79	2715955	England	Arsenal	7
+1224	Moussa Djenepo	Alex Williams	1987-10-30	1	0	Midfielder	34	3	174	81	t	0.7000000000000001	770123	Mali	Bournemouth	10
+1225	Ben Doak	John Miller	1999-07-29	1	2	Forward	30	3	198	74	t	0.79	1665344	Scotland	Arsenal	38
+1226	Lewis Dobbin	Michael Williams	1997-12-07	2	0	Forward	15	0	210	57	t	0.74	83294	England	Arsenal	24
+1227	Matt Doherty	John Brown	1990-08-14	2	0	Defender	11	6	171	97	t	0.76	2881846	Ireland	Fulham	10
+1228	Jamie Donley	James Rodriguez	1990-11-21	0	0	Forward	17	9	208	62	t	0.78	357022	England	Crystal Palace	41
+1229	Aaron Donnelly	John Williams	1984-07-06	2	0	Defender	2	6	185	56	t	0.71	1407828	Northern Ireland	West Ham	9
+1230	Alfie Dorrington	Michael Smith	2005-12-26	0	2	Defender	15	4	201	65	t	0.74	1047289	England	Southampton	5
+1231	Cheick Doucouré	Liam Williams	1990-06-23	0	0	Midfielder	5	3	209	76	t	0.73	1193659	Mali	Everton	10
+1232	Douglas Luiz	Emma Rodriguez	1996-02-17	5	0	Midfielder	11	6	201	83	t	0.72	2429485	Brazil	Liverpool	9
+1233	Flynn Downes	Sophia Garcia	1996-05-09	4	0	Midfielder	16	0	172	82	t	0.76	1226141	England	Everton	7
+1234	Tommy Doyle	Olivia Brown	1984-03-10	1	0	Midfielder	37	10	207	63	t	0.79	636964	England	Southampton	4
+1235	Cody Drameh	Noah Rodriguez	1986-07-01	2	0	Defender	13	0	202	82	t	0.73	2778414	England	Aston Villa	2
+1236	Shane Duffy	Emma Davis	2005-05-26	1	0	Defender	37	9	201	93	t	0.79	2306024	Ireland	Brighton	3
+1237	Paul Dummett	Sophia Martinez	1999-09-16	0	0	Defender	8	5	193	55	t	0.74	2357521	Wales	Fulham	6
+1238	Lewis Dunk	Liam Garcia	2005-08-07	2	0	Defender	27	6	182	90	t	0.74	1347108	England	Brentford	0
+1239	Jhon Durán	Noah Johnson	1989-06-21	4	0	Forward	6	7	210	54	t	0.8	866509	Colombia	Southampton	31
+1240	Malcolm Ebiowei	Sophia Miller	1984-04-04	4	2	Forward	0	7	174	57	t	0.71	2592055	England	Brighton	41
+1241	Odsonne Édouard	James Brown	1998-07-30	5	0	Forward	39	6	175	64	t	0.72	2263493	France	Fulham	23
+1242	Samuel Edozie	Olivia Martinez	1992-05-25	1	0	Midfielder	4	8	202	69	t	0.74	1002437	England	Brighton	8
+1243	Khayon Edwards	James Jones	1992-02-20	5	0	Forward	37	2	177	79	t	0.73	2636084	England	Chelsea	20
+1244	Pierre Ekwah	Sophia Jones	1996-03-15	3	0	Midfielder	36	2	208	97	t	0.73	1679215	France	Bournemouth	8
+1245	Anwar El Ghazi	Emma Brown	1995-05-20	0	0	Forward	16	7	172	65	t	0.78	1787889	Netherlands	Chelsea	26
+1246	Anthony Elanga	Maria Brown	1986-11-30	3	0	Forward	2	7	208	67	t	0.77	239393	Sweden	Nott'ham Forest	32
+1247	Ben Elliott	James Miller	1991-07-14	0	0	Midfielder	26	5	191	96	t	0.78	2741105	Cameroon	Wolves	4
+1248	Mohamed Elyounoussi	John Martinez	1990-06-12	2	0	Midfielder	7	9	170	97	t	0.75	1767424	Norway	Southampton	4
+1249	Noam Emeran	Sophia Williams	1992-04-21	0	0	Forward	19	3	172	87	t	0.73	783538	France	Everton	45
+1250	Emerson	Maria Miller	1994-06-19	5	0	Defender	36	8	188	74	t	0.77	2639227	Italy	West Ham	4
+1251	Emerson Royal	Sophia Johnson	1991-07-05	2	0	Defender	8	3	210	82	t	0.76	1313704	Brazil	Crystal Palace	8
+1252	Julio Enciso	Maria Johnson	1997-02-20	2	0	Forward	3	9	198	93	t	0.79	278474	Paraguay	Nott'ham Forest	24
+1253	Christian Eriksen	Maria Williams	1999-02-26	4	2	Midfielder	6	1	190	95	t	0.76	2297754	Denmark	Brighton	7
+1254	Pervis Estupiñán	Noah Johnson	1991-08-16	5	0	Defender	23	8	182	93	t	0.74	466058	Ecuador	Liverpool	0
+1255	Jonny Evans	John Davis	1988-12-26	2	0	Defender	40	3	176	55	t	0.79	2295549	Northern Ireland	Liverpool	1
+1256	Oliver Ewing	Emma Rodriguez	1989-07-07	1	0	Midfielder	28	3	182	88	t	0.8	1708706	Wales	Wolves	5
+1257	Eberechi Eze	Noah Jones	1985-04-12	5	0	Midfielder	38	3	190	89	t	0.74	299959	England	Brentford	3
+1258	Fabinho	Emma Davis	2000-06-04	3	0	Midfielder	5	0	198	67	t	0.72	1965945	Brazil	Manchester Utd	1
+1259	Fábio Carvalho	Maria Williams	2001-04-01	3	0	Midfielder	35	10	185	85	t	0.72	355116	Portugal	Fulham	7
+1260	Fábio Silva	Alex Jones	1992-03-30	4	2	Forward	19	8	210	72	t	0.79	1275534	Portugal	Arsenal	39
+1261	Fábio Vieira	James Miller	1984-11-27	5	1	Midfielder	2	6	174	59	t	0.77	2035824	Portugal	Newcastle Utd	7
+1262	Wout Faes	Emma Smith	1992-10-16	5	0	Defender	34	10	179	87	t	0.76	2493423	Belgium	Leeds United	4
+1263	Malachi Fagan-Walcott	Noah Williams	1995-01-09	1	0	Defender	10	0	171	75	t	0.78	1105296	England	Manchester Utd	0
+1264	Federico Fernández	Maria Williams	1985-08-24	5	0	Defender	31	6	195	78	t	0.79	1093485	Argentina	Bournemouth	3
+1265	Josh Feeney	Noah Davis	1997-02-16	0	0	Defender	12	3	185	94	t	0.8	160301	England	Tottenham	5
+1266	Felipe	James Smith	1990-04-24	3	1	Defender	15	4	196	70	t	0.76	2415744	Brazil	Arsenal	0
+1267	Evan Ferguson	Michael Garcia	1996-02-25	1	0	Forward	19	1	174	79	t	0.77	1060441	Ireland	Brentford	43
+1268	Fernandinho	Sophia Brown	2005-01-07	4	0	Midfielder	8	10	187	92	t	0.72	542404	Brazil	Crystal Palace	6
+1269	Billy Fewster	Liam Brown	1997-11-16	4	0	Midfielder	31	2	187	64	t	0.78	2864759	England	Wolves	10
+1270	Ryan Finnigan	Noah Williams	2005-01-07	1	0	Midfielder	5	0	198	72	t	0.8	2268681	England	Manchester Utd	6
+1271	Junior Firpo	Noah Williams	1995-04-09	5	0	Defender	28	0	180	81	t	0.79	2837449	Spain	Tottenham	1
+1272	Will Fish	Olivia Martinez	1991-06-06	0	0	Defender	20	4	179	68	t	0.8	2834000	England	Arsenal	0
+1273	Ethan Fitzhugh	Alex Jones	1991-06-20	1	0	Midfielder	9	4	197	82	t	0.8	331442	England	Bournemouth	5
+1274	Marcelo Flores	Olivia Garcia	1984-04-19	3	0	Midfielder	23	5	189	92	t	0.76	784011	Mexico	Nott'ham Forest	10
+1275	Shane Flynn	Maria Brown	1992-12-24	3	1	Midfielder	34	5	174	88	t	0.73	2259263	Ireland	Leeds United	3
+1276	Phil Foden	Michael Smith	1990-02-25	0	0	Midfielder	17	5	204	99	t	0.73	2729907	England	Nott'ham Forest	8
+1277	Wesley Fofana	Emma Garcia	1992-05-08	0	0	Defender	4	6	183	58	t	0.8	2840049	France	Fulham	5
+1278	Taylor Foran	Emma Brown	1996-03-11	1	0	Defender	17	1	184	68	t	0.77	2708783	England	Tottenham	3
+1279	Michael Forbes	John Brown	1999-01-06	3	0	Defender	8	5	194	93	t	0.7000000000000001	2854909	Northern Ireland	West Ham	0
+1280	Tyrese Fornah	Maria Martinez	1985-01-22	3	0	Midfielder	3	3	187	89	t	0.8	1989170	Sierra Leone	Brentford	1
+1281	Pablo Fornals	Liam Brown	2003-10-18	3	0	Midfielder	13	8	171	81	t	0.76	2466984	Spain	Leeds United	6
+1282	Adam Forshaw	James Johnson	1999-12-22	2	0	Midfielder	10	9	184	57	t	0.77	960534	England	Chelsea	0
+1283	Marcus Forss	Maria Davis	2004-05-10	5	0	Forward	4	5	207	56	t	0.71	1322801	Finland	Everton	32
+1284	Marlon Fossey	Noah Johnson	1992-08-10	1	0	Defender	17	4	170	97	t	0.77	1326319	United States	Southampton	0
+1285	Tariqe Fosu-Henry	Liam Miller	2003-12-12	5	2	Midfielder	37	10	194	57	t	0.74	2264423	Ghana	Bournemouth	4
+1286	Chris Francis	John Brown	2005-01-26	5	0	Defender	1	3	185	85	t	0.73	2527373	England	Aston Villa	10
+1287	Tyrese Francois	Sophia Smith	2001-07-04	3	0	Midfielder	2	9	195	85	t	0.72	673504	Australia	Leeds United	6
+1288	Ryan Fraser	Alex Smith	1999-11-21	1	0	Midfielder	8	1	179	84	t	0.72	2883698	Scotland	Arsenal	8
+1289	Melkamu Frauendorf	Sophia Rodriguez	1995-08-21	3	2	Midfielder	26	3	189	91	t	0.73	2808201	Germany	Nott'ham Forest	2
+1290	Fred	John Miller	2002-08-27	0	0	Midfielder	4	0	194	68	t	0.7000000000000001	550398	Brazil	Newcastle Utd	7
+1291	Ryan Fredericks	Noah Johnson	1995-06-11	0	0	Defender	10	7	205	86	t	0.8	2744951	England	Chelsea	2
+1292	Tyler Fredricson	Emma Rodriguez	1995-12-24	2	0	Defender	27	9	200	91	t	0.77	2913625	England	Bournemouth	7
+1293	Remo Freuler	Noah Rodriguez	1989-04-09	4	0	Midfielder	22	9	198	83	t	0.77	992793	Switzerland	Everton	0
+1294	James Furlong	Emma Garcia	1999-06-27	2	2	Defender	0	8	196	79	t	0.75	854897	Ireland	Manchester City	4
+1295	Gabriel Jesus	Noah Jones	2005-10-08	3	0	Forward	29	4	200	91	t	0.73	111003	Brazil	Chelsea	20
+1296	Gabriel Magalhães	John Miller	1998-03-10	2	0	Defender	32	1	183	96	t	0.78	2217034	Brazil	Tottenham	1
+1297	Gabriel Martinelli	Noah Jones	1984-01-22	0	0	Midfielder	32	6	169	76	t	0.73	2012901	Brazil	West Ham	8
+1298	Cody Gakpo	Noah Martinez	2003-05-27	5	0	Forward	33	7	193	59	t	0.8	2509050	Netherlands	Everton	47
+1299	Conor Gallagher	Noah Williams	2004-07-02	5	0	Midfielder	27	7	176	82	t	0.79	2440093	England	Brighton	9
+1300	Tomas Galvez	James Miller	1984-03-15	2	0	Defender	14	10	206	79	t	0.74	2169675	Finland	Liverpool	7
+1301	Alejandro Garnacho	Alex Jones	2005-12-20	3	2	Forward	35	9	203	82	t	0.76	1484644	Argentina	Tottenham	45
+1302	James Garner	Michael Brown	2004-11-01	0	1	Midfielder	31	5	173	60	t	0.78	2872280	England	Arsenal	4
+1303	Dwight Gayle	Emma Davis	1986-12-17	2	1	Forward	0	3	191	97	t	0.76	2530767	England	Tottenham	27
+1304	Jean-Philippe Gbamin	Noah Jones	1992-07-26	0	1	Midfielder	1	2	210	61	t	0.74	530420	Cote D’Ivoire	Manchester Utd	0
+1305	Joe Gelhardt	James Jones	1997-04-01	0	0	Forward	9	2	194	70	t	0.73	2853426	England	Everton	32
+1306	Brooklyn Genesini	John Garcia	1998-11-18	4	0	Defender	36	7	202	81	t	0.74	2609133	England	Wolves	0
+1307	Saman Ghoddos	Emma Garcia	1995-11-29	4	0	Forward	30	4	190	83	t	0.73	2913618	Iran	Wolves	50
+1308	Morgan Gibbs-White	Sophia Rodriguez	2005-10-25	1	0	Midfielder	4	8	206	83	t	0.78	1258926	England	Manchester City	1
+1309	Lewis Gibson	Alex Garcia	2001-03-27	3	0	Defender	21	7	192	90	t	0.72	903557	England	Aston Villa	10
+1310	Alexander Gibson-Hammond	Maria Martinez	1992-08-21	4	1	Forward	20	0	174	77	t	0.72	844280	England	Liverpool	43
+1311	Tarik Gidaree	Maria Martinez	2003-12-30	2	1	Defender	1	10	198	56	t	0.79	2069569	England	Leicester City	9
+1312	Bryan Gil	Michael Johnson	1995-11-05	4	0	Forward	12	9	194	84	t	0.78	2719765	Spain	Wolves	33
+1313	Alex Gilbert	Olivia Jones	1993-01-24	3	0	Midfielder	18	1	202	58	t	0.74	1570099	Ireland	Newcastle Utd	3
+1314	Alfie Gilchrist	John Johnson	2002-03-02	3	0	Defender	10	3	198	87	t	0.78	1275425	England	Manchester Utd	8
+1315	Ryan Giles	Liam Rodriguez	1991-12-16	5	0	Midfielder	2	9	205	91	t	0.71	2610129	England	Nott'ham Forest	0
+1316	Billy Gilmour	Noah Smith	2002-01-10	0	0	Midfielder	6	7	177	83	t	0.73	338333	Scotland	Wolves	7
+1317	Ryan Glover	Maria Johnson	1993-08-21	4	0	Midfielder	4	1	208	95	t	0.77	375836	England	Southampton	9
+1318	Wilfried Gnonto	Alex Rodriguez	1995-04-08	4	0	Forward	6	4	201	77	t	0.75	2950288	Italy	Brighton	38
+1319	Ben Godfrey	Liam Brown	1993-05-04	5	0	Defender	28	8	189	58	t	0.77	372862	England	Brentford	10
+1320	Martial Godo	Noah Davis	1990-07-22	3	0	Forward	6	6	173	67	t	0.72	2413182	England	Southampton	24
+1321	Claudio Gomes	Alex Garcia	1994-11-24	1	0	Midfielder	21	0	170	62	t	0.71	378162	France	Newcastle Utd	6
+1322	Joe Gomez	James Jones	1988-02-23	4	0	Defender	35	5	205	99	t	0.8	2455428	England	Crystal Palace	3
+1323	Gonçalo Guedes	Emma Brown	2000-05-17	2	1	Forward	36	2	189	83	t	0.71	2257242	Portugal	Liverpool	34
+1324	Charlie Goode	Emma Davis	1986-08-25	0	0	Defender	30	6	184	77	t	0.71	770292	England	Manchester City	9
+1325	Lewis Gordon	Alex Davis	2004-11-05	3	0	Defender	15	3	196	57	t	0.76	1198134	Scotland	Brentford	6
+1326	Daniel Gore	Olivia Garcia	2005-11-03	0	0	Midfielder	6	4	210	74	t	0.77	1847407	England	Brighton	7
+1327	Lewis Grabban	Olivia Johnson	1988-10-06	3	0	Forward	34	9	182	61	t	0.71	1166886	England	Fulham	41
+1328	Demarai Gray	Olivia Smith	1994-08-23	3	0	Forward	21	10	207	66	t	0.8	2397300	Jamaica	Leicester City	23
+1329	Jack Grealish	James Rodriguez	1995-04-13	3	2	Midfielder	18	10	192	61	t	0.7000000000000001	2936718	England	Brighton	2
+1330	Ben Greenwood	Noah Jones	1999-11-14	5	0	Defender	2	2	189	78	t	0.79	67832	Ireland	Leeds United	3
+1331	Seán Grehan	Sophia Garcia	1984-07-31	2	0	Defender	10	2	182	63	t	0.79	2156653	Ireland	Manchester Utd	0
+1332	Harvey Griffiths	Liam Rodriguez	1991-12-10	4	0	Midfielder	6	9	169	70	t	0.79	1013591	England	Fulham	8
+1333	Pascal Groß	Noah Johnson	1986-01-22	1	0	Midfielder	3	5	179	94	t	0.71	730524	Germany	Aston Villa	9
+1334	Marc Guéhi	John Jones	2000-11-25	0	2	Defender	12	1	194	85	t	0.75	1322022	England	Chelsea	0
+1335	Idrissa Gueye	Alex Smith	1984-07-29	3	1	Midfielder	18	7	209	83	t	0.7000000000000001	2848468	Senegal	Everton	9
+1336	Frédéric Guilbert	Olivia Brown	1989-07-07	5	2	Defender	13	1	186	72	t	0.71	2780884	France	Aston Villa	7
+1337	Ilkay Gündogan	James Jones	1988-09-10	5	0	Midfielder	29	2	193	87	t	0.75	1430818	Germany	Liverpool	2
+1338	Gustavo Scarpa	Liam Garcia	1996-01-19	3	0	Midfielder	37	2	210	99	t	0.78	2195940	Brazil	Southampton	7
+1339	Malo Gusto	Sophia Davis	2000-12-22	2	0	Defender	22	5	175	95	t	0.75	1947816	France	Aston Villa	1
+1340	Darko Gyabi	Olivia Smith	1999-12-21	1	2	Midfielder	20	8	197	65	t	0.72	673309	England	Manchester City	1
+1341	Erling Haaland	Liam Williams	2004-01-06	5	2	Forward	2	8	190	75	t	0.71	2742544	Norway	Crystal Palace	39
+1342	Lewis Hall	Maria Rodriguez	2001-07-06	4	0	Defender	24	8	202	93	t	0.8	2582395	England	Manchester City	7
+1343	Oliver Hammond	Liam Brown	1988-12-11	3	0	Midfielder	16	10	206	59	t	0.73	1516434	Wales	Leeds United	4
+1344	Reece Hannam	Michael Jones	1992-05-19	3	0	Defender	10	1	183	82	t	0.72	2381278	England	Nott'ham Forest	9
+1345	Isak Hansen-Aaröen	John Brown	1995-12-20	5	0	Midfielder	36	4	178	72	t	0.77	2628390	Norway	Leeds United	3
+1346	Riley Harbottle	Olivia Martinez	1997-10-29	1	0	Defender	29	3	196	54	t	0.75	2868692	England	Brighton	6
+1347	Björn Hardley	John Rodriguez	1994-03-10	2	0	Defender	12	6	195	62	t	0.75	2657770	Netherlands	Nott'ham Forest	7
+1348	Luke Harris	Noah Smith	2002-04-04	3	1	Midfielder	32	3	178	90	t	0.76	2374036	Wales	Liverpool	2
+1349	Jack Harrison	Sophia Jones	2000-09-09	3	0	Midfielder	14	8	184	65	t	0.77	714312	England	Southampton	6
+1350	Taylor Harwood-Bellis	Olivia Jones	2003-12-06	3	0	Defender	6	6	187	89	t	0.79	735758	England	Manchester Utd	4
+1351	Kortney Hause	Liam Smith	1985-11-14	2	0	Defender	7	3	183	97	t	0.74	1425773	England	Southampton	0
+1352	Kai Havertz	John Brown	1996-03-02	4	0	Midfielder	21	8	180	63	t	0.76	2873758	Germany	Manchester Utd	5
+1353	Isaac Hayden	Michael Garcia	1986-03-05	5	0	Midfielder	6	7	205	68	t	0.75	2827402	England	Wolves	5
+1354	Max Haygarth	Michael Rodriguez	2001-02-26	1	0	Midfielder	5	9	184	96	t	0.76	2059453	England	Manchester City	5
+1355	Michael Hector	Alex Smith	2002-01-20	5	0	Defender	15	4	179	78	t	0.72	788056	Jamaica	Crystal Palace	2
+1356	Hélder Costa	Emma Rodriguez	1984-02-10	4	2	Forward	1	9	178	84	t	0.78	787940	Angola	Chelsea	48
+1357	Jordan Henderson	Noah Rodriguez	1986-07-30	5	0	Midfielder	24	8	201	95	t	0.71	2840299	England	Wolves	4
+1358	Jeff Hendrick	Michael Martinez	2001-03-18	0	0	Midfielder	16	9	188	94	t	0.78	1903300	Ireland	Aston Villa	8
+1359	Rico Henry	Sophia Smith	1994-03-01	4	0	Defender	33	0	208	94	t	0.7000000000000001	720937	England	Brentford	9
+1360	Yangel Herrera	Olivia Martinez	2003-11-30	3	0	Midfielder	1	0	195	58	t	0.79	2317400	Venezuela	West Ham	9
+1361	Aaron Hickey	Michael Miller	1987-08-29	2	0	Defender	12	2	191	75	t	0.8	1277406	Scotland	Brighton	3
+1362	James Hill	Alex Johnson	1991-10-21	5	0	Defender	39	1	192	99	t	0.8	338129	England	Arsenal	3
+1363	Jack Hinchy	John Garcia	1988-05-29	0	0	Midfielder	36	8	185	97	t	0.78	2970511	England	Manchester Utd	9
+1364	Jack Hinshelwood	Olivia Williams	1986-03-07	2	0	Midfielder	14	0	207	99	t	0.77	261082	England	Southampton	1
+1365	George Hirst	Michael Miller	1995-06-03	2	0	Forward	18	9	188	74	t	0.79	1598532	England	Wolves	39
+1366	Leo Hjelde	Noah Brown	2000-10-18	5	2	Defender	12	7	177	85	t	0.76	2126385	Norway	Bournemouth	3
+1367	Joe Hodge	Emma Williams	1985-12-14	3	1	Midfielder	12	9	200	80	t	0.7000000000000001	1338598	Ireland	Brighton	0
+1368	Ki-Jana Hoever	Olivia Smith	2000-09-17	0	2	Defender	38	9	170	59	t	0.75	2140676	Netherlands	Liverpool	5
+1369	Rob Holding	John Davis	2001-06-18	0	0	Defender	1	0	190	86	t	0.73	1327650	England	Crystal Palace	4
+1370	Mason Holgate	Alex Miller	1989-02-06	3	2	Defender	23	5	185	55	t	0.72	2383366	England	Brighton	8
+1371	Conor Hourihane	Michael Brown	1999-07-13	1	0	Midfielder	17	6	170	88	t	0.8	2134538	Ireland	Wolves	0
+1372	Callum Hudson-Odoi	Sophia Davis	2005-03-26	5	1	Forward	8	3	184	81	t	0.75	506662	England	Aston Villa	32
+1373	Will Hughes	John Smith	2000-12-16	3	0	Midfielder	30	1	206	67	t	0.77	1863642	England	Aston Villa	10
+1374	Joe Hugill	Noah Rodriguez	1998-04-08	1	0	Forward	22	8	202	69	t	0.78	1110910	England	Everton	43
+1375	Hugo Bueno	John Rodriguez	1985-04-27	1	0	Defender	13	10	186	77	t	0.8	576912	Spain	Liverpool	10
+1376	Bashir Humphreys	Liam Williams	1996-01-08	3	0	Defender	5	10	195	78	t	0.74	2345706	England	Wolves	3
+1377	Omari Hutchinson	Olivia Johnson	2004-03-19	5	1	Midfielder	9	6	201	88	t	0.76	1463205	Jamaica	Arsenal	1
+1378	Hwang Hee-Chan	John Garcia	1993-09-15	3	0	Forward	38	6	170	89	t	0.7000000000000001	287853	South Korea	Fulham	32
+1379	Hwang Ui-Jo	Sophia Brown	2002-02-23	5	0	Forward	30	5	207	78	t	0.78	1136617	South Korea	Bournemouth	22
+1380	Pierre-Emile Højbjerg	Alex Williams	2002-08-03	1	0	Midfielder	27	1	188	88	t	0.78	2845617	Denmark	Southampton	10
+1381	Bradley Ibrahim	Michael Jones	1986-08-06	2	0	Midfielder	0	8	189	91	t	0.71	434946	England	Manchester City	1
+1382	Kelechi Iheanacho	Alex Smith	1993-02-08	0	0	Forward	8	2	178	87	t	0.74	2762590	Nigeria	Arsenal	48
+1383	Danny Ings	Alex Garcia	1993-10-21	1	0	Forward	35	0	193	67	t	0.8	1765802	England	Manchester City	26
+1384	Nicolas Ioannou	Liam Brown	2001-06-23	0	0	Defender	16	0	180	66	t	0.71	2244037	Cyprus	Nott'ham Forest	6
+1385	Tim Iroegbunam	Sophia Johnson	1992-12-26	4	2	Midfielder	11	2	180	65	t	0.78	1300649	England	Manchester Utd	10
+1386	Alexander Isak	James Williams	1998-08-18	4	0	Forward	38	3	190	80	t	0.73	1293026	Sweden	Manchester City	39
+1387	Ivan Cavaleiro	Michael Williams	1988-04-06	5	0	Forward	34	5	170	87	t	0.72	1913239	Angola	Fulham	31
+1388	Alex Iwobi	Liam Miller	1992-07-20	1	0	Forward	13	1	206	88	t	0.71	2780045	Nigeria	Newcastle Utd	38
+1389	Jacob Murphy	Emma Miller	1985-10-14	4	1	Midfielder	11	2	188	70	t	0.75	2693585	England	Chelsea	0
+1390	Reece James	Noah Martinez	1993-08-28	2	0	Defender	30	7	197	79	t	0.76	810460	England	Wolves	5
+1391	Vitaly Janelt	Maria Garcia	2003-03-31	3	2	Midfielder	4	7	197	63	t	0.8	2754203	Germany	Leicester City	5
+1392	Pontus Jansson	Noah Martinez	1993-07-30	4	0	Defender	12	9	186	91	t	0.75	968821	Sweden	Fulham	1
+1393	Julian Jeanvier	Maria Miller	1995-05-16	1	0	Defender	6	6	169	95	t	0.76	2598002	Guinea	Brentford	7
+1394	Jack Jenkins	Olivia Jones	1994-04-22	2	0	Midfielder	25	0	189	57	t	0.79	1283802	England	Liverpool	0
+1395	Teddy Jenks	Emma Brown	1990-08-18	5	0	Midfielder	33	5	181	68	t	0.7000000000000001	663259	England	Manchester Utd	4
+1396	Mathias Jensen	Emma Smith	2002-07-22	0	0	Midfielder	20	9	182	62	t	0.73	244574	Denmark	Liverpool	4
+1397	Jeong Sang-Bin	Emma Garcia	2001-11-25	1	0	Forward	40	0	178	90	t	0.73	1843203	South Korea	Brighton	26
+1398	Raúl Jiménez	Olivia Brown	2002-04-21	5	0	Forward	24	10	188	73	t	0.71	1097046	Mexico	Leicester City	46
+1399	João Cancelo	James Rodriguez	1990-03-01	5	0	Defender	15	1	195	62	t	0.79	182359	Portugal	Leeds United	9
+1400	João Félix	Noah Davis	1986-09-09	5	2	Forward	19	4	172	56	t	0.71	2234374	Portugal	Chelsea	32
+1401	João Gomes	Maria Davis	1994-01-16	5	0	Midfielder	10	4	176	66	t	0.78	1349689	Brazil	West Ham	10
+1402	João Moutinho	Noah Jones	1990-03-07	1	0	Midfielder	1	8	174	89	t	0.72	884416	Portugal	Aston Villa	6
+1403	João Palhinha	James Rodriguez	1985-07-21	2	1	Midfielder	8	4	199	90	t	0.76	2587967	Portugal	Brighton	6
+1404	Joelinton	Alex Johnson	1990-01-31	5	0	Forward	16	7	172	87	t	0.73	2372522	Brazil	Tottenham	26
+1405	Kyle John	Emma Rodriguez	1991-02-08	3	0	Defender	32	6	191	57	t	0.8	2184944	England	Chelsea	7
+1406	Brennan Johnson	John Williams	2000-01-16	1	1	Forward	21	6	189	62	t	0.79	2031774	Wales	Brighton	43
+1407	Curtis Jones	Emma Davis	2000-08-16	3	0	Midfielder	5	2	198	69	t	0.74	2036151	England	Southampton	1
+1408	Jonjo Shelvey	James Williams	1993-11-13	3	0	Midfielder	28	3	172	67	t	0.72	1984222	England	Nott'ham Forest	0
+1409	Jorginho	Liam Smith	1984-11-24	1	0	Midfielder	38	5	176	72	t	0.7000000000000001	933481	Italy	Fulham	6
+1410	Mateo Joseph	John Davis	1995-01-18	1	0	Forward	19	1	176	93	t	0.75	2866985	England	Bournemouth	23
+1411	Marc Jurado	James Martinez	1992-07-09	4	0	Defender	30	10	193	93	t	0.7000000000000001	2801265	Spain	Wolves	10
+1412	James Justin	James Brown	1989-08-22	1	0	Defender	7	9	201	75	t	0.73	1758980	England	Bournemouth	9
+1413	Issa Kaboré	Maria Garcia	2004-10-08	4	2	Defender	39	0	188	61	t	0.79	1301499	Burkina Faso	Fulham	6
+1414	Sasa Kalajdzic	Emma Brown	1986-11-18	4	0	Forward	35	8	210	86	t	0.8	463455	Austria	Chelsea	36
+1415	Boubacar Kamara	Emma Miller	2004-08-14	5	0	Midfielder	28	4	198	54	t	0.76	852040	France	Brighton	1
+1416	Harry Kane	John Rodriguez	1992-12-21	1	0	Forward	13	8	188	56	t	0.73	2928466	England	Bournemouth	23
+1417	N'Golo Kanté	Alex Johnson	1996-01-24	2	2	Midfielder	11	8	207	59	t	0.78	1105426	France	Nott'ham Forest	7
+1418	Michal Karbownik	John Miller	1986-07-20	5	2	Defender	38	3	209	81	t	0.75	1196618	Poland	West Ham	9
+1419	Jadel Katongo	Michael Williams	1989-05-23	4	1	Defender	34	3	194	85	t	0.79	2834768	England	Aston Villa	6
+1420	Hayao Kawabe	Olivia Johnson	2000-05-29	5	1	Midfielder	22	1	169	62	t	0.73	2347360	Japan	Leeds United	3
+1421	Kayky	Michael Miller	1991-11-28	1	0	Forward	24	1	174	89	t	0.74	2077490	Brazil	Nott'ham Forest	35
+1422	Moise Kean	Sophia Smith	2005-05-23	0	0	Forward	5	6	179	95	t	0.7000000000000001	55509	Italy	Chelsea	20
+1424	Neeskens Kebano	John Brown	1986-08-24	3	0	Midfielder	39	6	196	61	t	0.71	194636	DR Congo	Bournemouth	2
+1423	Michael Keane	John Davis	1988-07-19	5	0	Defender	24	2	187	89	t	0.75	2187184	England	Arsenal	6
+1425	Thilo Kehrer	Maria Rodriguez	1998-06-13	0	0	Defender	15	7	199	61	t	0.8	2379573	Germany	Leicester City	7
+1426	Naby Keïta	Olivia Jones	1992-07-22	4	1	Midfielder	39	3	204	88	t	0.73	1683934	Guinea	Fulham	2
+1427	Lloyd Kelly	James Smith	1996-07-12	0	0	Defender	15	3	176	98	t	0.72	2705322	England	Brighton	7
+1429	Nohan Kenneh	Olivia Johnson	1987-01-11	0	0	Midfielder	18	9	190	84	t	0.75	663361	Liberia	Newcastle Utd	4
+1430	Jonjoe Kenny	Michael Martinez	1996-04-10	2	0	Defender	22	2	173	61	t	0.73	2758785	England	Aston Villa	9
+1431	Kaine Kesler-Hayden	Olivia Williams	1991-10-16	0	0	Defender	11	8	172	57	t	0.79	1328138	England	West Ham	3
+1432	Reda Khadra	Noah Johnson	1989-03-20	1	0	Midfielder	6	5	186	93	t	0.7000000000000001	303743	Germany	Leeds United	5
+1433	Gavin Kilkenny	Liam Johnson	1988-03-03	5	0	Midfielder	5	1	170	70	t	0.75	1251212	Ireland	Arsenal	1
+1434	Maximilian Kilman	Maria Brown	1997-02-08	4	0	Defender	18	7	201	61	t	0.75	62470	England	Manchester Utd	5
+1435	Max Kinsey-Wellings	Olivia Martinez	1995-06-10	0	0	Defender	23	3	170	72	t	0.79	2882560	England	Newcastle Utd	0
+1436	Alex Kirk	Michael Miller	1994-08-11	3	0	Defender	22	7	184	57	t	0.76	288470	England	Newcastle Utd	10
+1437	Jakub Kiwior	Liam Davis	1991-09-27	4	0	Defender	32	7	175	56	t	0.7000000000000001	2591621	Poland	Brentford	4
+1438	Mateusz Klich	Sophia Williams	1999-07-02	4	0	Midfielder	37	9	209	56	t	0.71	1665348	Poland	Manchester City	5
+1439	Ben Knight	Michael Brown	1999-02-26	3	0	Forward	29	8	169	55	t	0.74	1360317	England	Arsenal	28
+1440	Anthony Knockaert	James Jones	1989-03-26	1	0	Midfielder	30	4	197	71	t	0.71	784160	France	West Ham	2
+1441	Robin Koch	Michael Miller	1989-11-30	3	0	Defender	35	0	206	76	t	0.79	2786138	Germany	Aston Villa	2
+1442	Sead Kolasinac	Alex Jones	1997-04-16	4	0	Defender	12	3	205	70	t	0.79	1282822	Bosnia & Herzegovina	Leicester City	0
+1443	Ibrahima Konaté	Noah Garcia	2003-12-19	0	1	Defender	5	7	169	85	t	0.8	2657381	France	Manchester City	3
+1444	Terence Kongolo	Sophia Smith	1985-08-08	1	0	Defender	14	4	196	84	t	0.77	1353803	Netherlands	Tottenham	4
+1445	Ezri Konsa	Emma Garcia	1993-09-23	4	0	Defender	17	0	171	73	t	0.75	474038	England	Tottenham	4
+1446	Kalidou Koulibaly	John Johnson	1999-05-21	3	0	Defender	19	3	196	71	t	0.72	1057197	Senegal	Southampton	3
+1447	Billy Koumetio	John Miller	1988-04-21	1	0	Defender	31	5	194	77	t	0.76	1734838	France	Brentford	5
+1448	Cheikhou Kouyaté	Alex Smith	2005-06-11	1	0	Midfielder	12	1	208	59	t	0.75	1304936	Senegal	Chelsea	8
+1449	Mateo Kovacic	Sophia Jones	1987-10-17	1	0	Midfielder	2	9	181	63	t	0.79	1173792	Croatia	Nott'ham Forest	0
+1450	Kacper Kozlowski	John Brown	2000-11-28	2	0	Midfielder	3	6	203	96	t	0.72	1668586	Poland	Leeds United	0
+1451	Emil Krafth	James Davis	1984-10-16	3	2	Defender	10	3	200	76	t	0.78	77424	Sweden	Fulham	3
+1452	Alex Král	Noah Johnson	1998-10-09	2	0	Midfielder	2	10	192	62	t	0.78	2572314	Czech Republic	Leicester City	6
+1454	Victor Kristiansen	Olivia Miller	2005-05-02	2	0	Defender	28	3	195	74	t	0.78	714086	Denmark	Wolves	9
+1455	Dejan Kulusevski	Olivia Rodriguez	1993-03-15	0	2	Midfielder	15	4	203	88	t	0.76	2800447	Sweden	Leeds United	5
+1456	Garang Kuol	Noah Miller	1988-10-05	0	0	Forward	10	10	208	59	t	0.71	1819091	Australia	Wolves	50
+1457	Layvin Kurzawa	Noah Smith	1985-02-14	2	0	Defender	4	0	180	97	t	0.74	200456	France	Everton	10
+1458	Alexandre Lacazette	Sophia Smith	1992-09-08	2	0	Forward	13	7	207	66	t	0.74	2037849	France	Wolves	22
+1459	Levi Laing	Michael Miller	1985-01-14	5	0	Defender	39	4	189	86	t	0.78	2713729	England	Manchester City	4
+1460	Ethan Laird	Liam Smith	1992-04-18	0	0	Defender	9	3	205	62	t	0.79	494133	England	Wolves	8
+1461	Adam Lallana	James Rodriguez	1987-12-27	2	0	Midfielder	1	8	188	80	t	0.76	1764817	England	Wolves	8
+1462	Tariq Lamptey	John Garcia	1996-03-20	4	0	Defender	18	6	200	66	t	0.73	390670	Ghana	Arsenal	2
+1463	Will Lankshear	Noah Garcia	1999-11-13	5	2	Forward	12	9	188	64	t	0.76	295363	England	Wolves	36
+1464	Manuel Lanzini	Noah Jones	2003-04-23	0	0	Midfielder	14	4	183	99	t	0.79	920021	Argentina	West Ham	9
+1465	Aymeric Laporte	Noah Smith	2005-08-01	1	0	Defender	39	7	202	60	t	0.72	2066926	Spain	Arsenal	3
+1466	Juan Larios	Noah Brown	2000-10-22	2	0	Defender	20	5	169	54	t	0.8	2745090	Spain	Bournemouth	5
+1467	Richie Laryea	Alex Jones	1984-03-02	5	0	Defender	36	3	209	94	t	0.79	643296	Canada	Newcastle Utd	0
+1468	Jamaal Lascelles	Maria Johnson	1994-02-08	5	0	Defender	20	7	177	77	t	0.74	2385868	England	Bournemouth	8
+1469	Roméo Lavia	Michael Garcia	1995-02-10	4	0	Midfielder	3	9	186	93	t	0.8	981977	Belgium	Bournemouth	7
+1470	Marcel Lavinier	Noah Rodriguez	1999-05-31	1	0	Defender	29	3	181	62	t	0.73	1083788	England	Wolves	7
+1471	Nico Lawrence	Liam Davis	1999-02-06	4	0	Defender	1	6	191	61	t	0.75	1003772	England	Leicester City	3
+1472	Dexter Lembikisa	Emma Miller	1995-12-02	2	0	Defender	6	6	180	74	t	0.72	380728	Jamaica	Nott'ham Forest	8
+1473	Mario Lemina	John Martinez	2003-05-28	4	0	Midfielder	34	1	170	58	t	0.71	675684	Gabon	Leeds United	4
+1474	Clément Lenglet	Alex Johnson	1994-10-17	4	0	Defender	13	4	205	69	t	0.72	2611048	France	Fulham	0
+1475	Léo Bonatini	Sophia Miller	1985-06-13	1	0	Forward	26	6	192	88	t	0.72	159812	Brazil	Fulham	31
+991	Ajibola Alese	Maria Martinez	1991-06-03	0	0	Defender	17	5	183	89	t	0.77	631314	England	Wolves	10
+992	Alex Telles	James Smith	1997-05-29	4	0	Defender	37	7	202	88	t	0.7000000000000001	358605	Brazil	Wolves	0
+993	Trent Alexander-Arnold	Olivia Davis	2000-01-28	1	0	Defender	30	3	180	54	t	0.75	1269917	England	Tottenham	3
+994	Allan	Liam Garcia	1985-07-16	4	0	Midfielder	24	10	204	87	t	0.78	1365138	Brazil	Southampton	6
+995	Charlie Allen	Liam Johnson	1987-09-06	4	0	Midfielder	35	6	203	59	t	0.77	1113937	Northern Ireland	West Ham	5
+996	Max Alleyne	Noah Smith	2000-01-30	0	0	Defender	7	3	191	64	t	0.75	2358332	England	Southampton	5
+997	Dele Alli	Olivia Jones	1992-09-22	5	0	Midfielder	3	10	173	58	t	0.73	2038567	England	Aston Villa	10
+998	Miguel Almirón	Alex Johnson	1995-08-14	4	0	Midfielder	22	7	185	85	t	0.8	912961	Paraguay	Leicester City	1
+999	Marcos Alonso	John Davis	1997-03-12	5	0	Defender	27	2	176	54	t	0.73	833020	Spain	Chelsea	3
+1000	Julián Álvarez	Liam Williams	2001-07-02	1	0	Forward	10	9	187	85	t	0.77	2964002	Argentina	West Ham	45
+1001	William Alves	Michael Brown	1987-09-30	3	1	Midfielder	28	9	202	86	t	0.77	2424954	England	Brighton	5
+1002	Steven Alzate	John Martinez	1989-07-29	1	0	Midfielder	24	1	199	91	t	0.77	2144203	Colombia	Fulham	0
+1003	Daniel Amartey	Liam Rodriguez	1990-11-24	3	0	Defender	10	6	184	94	t	0.76	784290	Ghana	Brighton	7
+1004	Samuel Amo-Ameyaw	Michael Jones	1992-01-28	0	1	Midfielder	26	10	202	59	t	0.71	418703	England	Newcastle Utd	0
+1005	Ethan Ampadu	Sophia Brown	1988-03-07	0	0	Defender	31	7	193	79	t	0.75	1067320	Wales	Crystal Palace	2
+1006	Joachim Andersen	Maria Jones	1985-07-10	4	1	Defender	30	4	188	67	t	0.74	2313651	Denmark	Leicester City	0
+1007	Joe Anderson	Alex Garcia	1991-07-21	2	0	Defender	40	7	205	68	t	0.77	2607890	England	Everton	0
+1008	Florin Andone	Emma Brown	1997-09-26	5	0	Forward	23	9	186	56	t	0.79	650204	Romania	Crystal Palace	25
+1009	André Gomes	Michael Johnson	1984-09-17	2	2	Midfielder	17	0	173	93	t	0.76	2092873	Portugal	Newcastle Utd	8
+1010	Andreas Pereira	James Jones	2005-08-05	2	0	Midfielder	11	6	206	65	t	0.76	888338	Brazil	Nott'ham Forest	3
+1011	Andrey Santos	Olivia Jones	1994-07-23	0	2	Midfielder	5	5	194	89	t	0.78	2594354	Brazil	Leicester City	9
+1012	Tino Anjorin	Michael Johnson	1986-06-09	1	0	Midfielder	16	2	195	89	t	0.77	377561	England	Chelsea	0
+1013	Jaidon Anthony	Olivia Martinez	2004-03-17	1	0	Forward	14	8	177	90	t	0.78	1324828	England	Fulham	35
+1182	Marc Cucurella	James Smith	1998-06-08	5	0	Defender	35	1	202	59	t	0.78	2705101	Spain	Tottenham	9
+1453	Rasmus Kristensen	Noah Miller	1999-07-14	5	0	Defender	17	5	187	62	t	0.7000000000000001	2172053	Denmark	Southampton	1
+1499	Luizão	Noah Brown	1985-12-04	4	1	Defender	19	8	177	73	t	0.72	214574	Brazil	Manchester Utd	4
+1500	Romelu Lukaku	Liam Smith	1992-10-04	1	0	Forward	29	6	192	55	t	0.77	191672	Belgium	Aston Villa	37
+1501	Sasa Lukic	Sophia Rodriguez	1994-01-09	0	0	Midfielder	2	0	208	99	t	0.76	2240434	Serbia	Bournemouth	1
+1502	Lyanco	James Brown	1992-01-08	4	0	Defender	1	0	209	79	t	0.71	375821	Brazil	Leeds United	7
+1503	Lyle Taylor	Olivia Rodriguez	2003-04-12	5	0	Forward	8	5	206	93	t	0.7000000000000001	1143472	Montserrat	West Ham	35
+1504	Brooklyn Lyons-Foster	Olivia Smith	1990-08-13	0	0	Defender	32	8	191	97	t	0.74	2374556	England	Manchester City	1
+1505	Ian Maatsen	Michael Williams	1986-11-26	3	0	Defender	33	4	175	80	t	0.8	2443051	Netherlands	Chelsea	2
+1506	Isaac Mabaya	Liam Brown	2001-08-29	3	0	Defender	24	9	203	59	t	0.78	946499	Zimbabwe	Brentford	9
+1507	Alexis Mac Allister	Sophia Rodriguez	2004-06-25	1	0	Midfielder	20	0	197	79	t	0.74	2403002	Argentina	Liverpool	9
+1508	James Maddison	Emma Garcia	1984-11-07	0	0	Midfielder	11	8	207	67	t	0.8	2873215	England	Liverpool	9
+1509	Noni Madueke	Emma Martinez	2000-08-08	2	0	Forward	16	0	183	86	t	0.71	1382178	England	Chelsea	38
+1510	Paris Maghoma	Maria Martinez	1996-12-21	0	0	Midfielder	33	6	186	91	t	0.77	694456	England	Leicester City	5
+1511	Harry Maguire	Emma Davis	1988-04-18	5	2	Defender	10	0	181	60	t	0.71	758124	England	Leicester City	9
+1512	Riyad Mahrez	John Davis	1992-11-20	1	0	Forward	21	8	187	87	t	0.8	1256863	Algeria	Manchester City	28
+1513	Kobbie Mainoo	Emma Martinez	1999-01-05	5	0	Midfielder	26	7	197	70	t	0.8	2586690	England	Nott'ham Forest	10
+1514	Ainsley Maitland-Niles	Emma Jones	1994-05-31	5	0	Midfielder	22	3	202	93	t	0.76	1164168	England	Leeds United	4
+1515	Tyrell Malacia	Noah Smith	1984-03-13	0	0	Defender	19	7	181	87	t	0.78	2445648	Netherlands	Arsenal	7
+1516	Sadio Mané	James Jones	1988-11-17	0	0	Forward	36	4	185	55	t	0.77	2295999	Senegal	Chelsea	43
+1517	Orel Mangala	Noah Garcia	1999-10-03	3	0	Midfielder	2	1	176	72	t	0.77	1557963	Belgium	Bournemouth	10
+1518	Javier Manquillo	James Brown	2005-01-02	0	0	Defender	20	2	172	93	t	0.79	2848055	Spain	Crystal Palace	4
+1519	Sékou Mara	Michael Williams	1994-08-16	5	0	Forward	32	5	188	70	t	0.74	903649	France	Southampton	35
+1520	Marçal	Maria Smith	1998-07-17	2	0	Defender	9	9	205	92	t	0.71	2064844	Brazil	Aston Villa	3
+1521	Solly March	John Garcia	1988-12-26	0	1	Midfielder	8	4	179	84	t	0.79	780702	England	West Ham	2
+1522	Emiliano Marcondes	Olivia Smith	1985-01-09	4	0	Midfielder	32	6	200	54	t	0.71	1276892	Denmark	Leicester City	2
+1523	Pablo Marí	Noah Williams	1989-08-04	4	0	Defender	39	7	178	82	t	0.75	2574639	Spain	Everton	10
+1524	Dilan Markanday	Sophia Miller	2000-05-06	3	0	Forward	31	4	180	71	t	0.75	1617224	England	Chelsea	21
+1525	Marquinhos	Alex Garcia	1990-01-27	0	0	Forward	12	5	194	93	t	0.77	2571874	Brazil	Tottenham	41
+1526	Anthony Martial	Noah Johnson	1985-07-02	1	0	Forward	13	0	180	96	t	0.77	864966	France	Chelsea	30
+1527	Arthur Masuaku	Liam Johnson	1991-06-06	4	0	Defender	40	3	205	71	t	0.7000000000000001	1301739	DR Congo	Fulham	9
+1528	Tawanda Maswanhise	Maria Davis	1994-05-16	0	0	Midfielder	22	0	191	61	t	0.77	1852132	Zimbabwe	Arsenal	8
+1529	Juan Mata	Noah Brown	2002-09-15	4	0	Midfielder	5	3	204	92	t	0.72	933479	Spain	Bournemouth	4
+1530	Jean-Philippe Mateta	Emma Johnson	2002-11-13	1	0	Forward	25	6	188	77	t	0.74	1506020	France	Brentford	48
+1531	Matheus Cunha	Emma Smith	1985-04-17	0	0	Forward	22	0	193	94	t	0.78	2560110	Brazil	Bournemouth	36
+1532	Matheus Nunes	Emma Miller	2002-07-28	3	0	Midfielder	15	7	173	89	t	0.8	2294230	Portugal	Leeds United	6
+1533	Nemanja Matic	John Brown	1999-07-26	2	0	Midfielder	14	9	170	78	t	0.7000000000000001	1578829	Serbia	Everton	10
+1534	Joël Matip	Michael Garcia	1994-10-29	0	0	Defender	7	6	188	85	t	0.75	1950582	Cameroon	Leicester City	6
+1535	Matthew Craig	James Rodriguez	1992-07-05	5	1	Midfielder	23	5	190	87	t	0.8	199052	Scotland	Chelsea	7
+1536	Matty Longstaff	Maria Rodriguez	2004-03-31	0	0	Midfielder	19	10	193	75	t	0.78	2425405	England	Liverpool	4
+1537	Neal Maupay	Noah Rodriguez	1992-08-02	4	2	Forward	20	2	173	68	t	0.7000000000000001	1925973	France	Aston Villa	33
+1538	Konstantinos Mavropanos	Maria Martinez	1987-08-29	2	0	Defender	40	9	175	55	t	0.8	2106799	Greece	Crystal Palace	2
+1539	Alfie Mawson	John Smith	1991-05-15	2	0	Defender	33	0	176	73	t	0.72	1344280	England	Manchester City	8
+1540	Kevin Mbabu	Sophia Williams	2004-05-18	5	0	Defender	20	2	187	75	t	0.77	571425	Switzerland	Leeds United	3
+1541	Loïc Mbe Soh	Sophia Brown	2002-07-29	5	0	Defender	8	1	183	87	t	0.78	792360	France	Wolves	5
+1542	Luke Mbete	Emma Martinez	1988-03-19	1	2	Defender	3	1	197	88	t	0.8	1895730	England	Brentford	3
+1543	Bryan Mbeumo	Michael Brown	1988-06-10	3	0	Midfielder	14	10	176	54	t	0.76	1579932	Cameroon	Arsenal	7
+1544	Xavier Mbuyamba	Liam Martinez	2000-12-11	1	0	Defender	14	5	172	75	t	0.74	1746851	Netherlands	Wolves	1
+1545	Sean McAllister	Noah Garcia	1999-02-11	3	0	Midfielder	18	10	197	89	t	0.75	838997	Northern Ireland	Nott'ham Forest	3
+1546	James McArthur	Liam Rodriguez	1998-11-18	3	0	Midfielder	19	8	178	93	t	0.76	1897371	Scotland	Arsenal	3
+1547	James McAtee	Sophia Williams	1997-02-03	5	0	Midfielder	5	8	198	59	t	0.76	1249097	England	Nott'ham Forest	7
+1548	Kasey McAteer	Emma Williams	1987-06-17	3	0	Midfielder	6	0	204	61	t	0.75	2558031	England	Aston Villa	6
+1549	Connor McAvoy	Alex Jones	1998-03-12	2	0	Defender	40	6	210	60	t	0.78	403074	Scotland	Bournemouth	2
+1550	Alfie McCalmont	Emma Brown	1988-04-14	5	0	Midfielder	30	0	206	72	t	0.76	818389	Northern Ireland	Bournemouth	6
+1551	Liam McCarron	Emma Brown	2004-01-22	5	0	Midfielder	24	9	180	86	t	0.7000000000000001	2258097	Scotland	Wolves	10
+1552	Rowan McDonald	James Martinez	1999-04-14	3	0	Midfielder	0	9	188	58	t	0.72	1347722	England	Chelsea	8
+1553	Callum McFarlane	John Williams	1992-07-01	5	0	Forward	0	8	184	79	t	0.77	644891	England	Liverpool	29
+1554	John McGinn	Olivia Garcia	1995-07-26	5	0	Midfielder	8	0	197	56	t	0.71	2415669	Scotland	Brentford	4
+1555	Scott McKenna	Emma Smith	1989-03-19	4	2	Defender	25	5	203	70	t	0.76	1424906	Scotland	Everton	0
+1556	Weston McKennie	Michael Rodriguez	1992-03-14	5	0	Midfielder	24	0	209	55	t	0.8	2413105	United States	Arsenal	7
+1557	Stuart McKinstry	Sophia Martinez	2002-07-25	1	0	Midfielder	21	8	187	60	t	0.78	1494212	Scotland	Brentford	9
+1558	Dwight McNeil	Noah Smith	1997-06-09	1	0	Forward	10	9	203	71	t	0.71	2198652	England	Arsenal	29
+1559	Charlie McNeill	Alex Smith	1989-01-15	4	0	Forward	4	3	197	59	t	0.8	2684927	England	Chelsea	38
+1560	Scott McTominay	Alex Jones	1984-09-10	0	0	Midfielder	33	8	195	82	t	0.73	2691579	Scotland	Fulham	10
+1561	Ben Mee	Liam Miller	1994-10-07	3	0	Defender	17	4	189	78	t	0.77	84806	England	Leeds United	2
+1562	Hannibal Mejbri	Michael Davis	1993-12-25	0	1	Midfielder	11	7	207	64	t	0.75	170372	Tunisia	Brighton	1
+1563	Teden Mengi	Sophia Miller	1994-04-21	0	0	Defender	35	4	206	74	t	0.8	504710	England	West Ham	6
+1564	Chris Mepham	James Rodriguez	2004-09-16	0	0	Defender	16	0	178	91	t	0.78	1106536	Wales	Liverpool	10
+1565	Matt Miazga	Alex Miller	1996-10-05	1	0	Defender	21	6	204	96	t	0.7000000000000001	147063	United States	Tottenham	4
+1566	Alex Mighten	Noah Smith	1998-08-01	2	0	Forward	22	8	208	67	t	0.74	2395382	England	Leicester City	40
+1567	Luka Milivojevic	Olivia Martinez	2002-04-30	4	0	Midfielder	28	2	188	62	t	0.72	453368	Serbia	Crystal Palace	6
+1568	Amari Miller	Noah Williams	2004-11-14	1	0	Forward	24	0	191	93	t	0.71	167375	England	Bournemouth	38
+1569	Stanley Mills	Olivia Rodriguez	1992-05-23	3	1	Midfielder	29	8	170	95	t	0.73	725723	England	Brighton	7
+1570	James Milner	Olivia Rodriguez	1992-04-15	5	0	Midfielder	2	3	174	82	t	0.7000000000000001	1970024	England	Southampton	0
+1571	Yerry Mina	Maria Miller	1991-10-19	5	0	Defender	26	4	173	91	t	0.76	1961104	Colombia	Aston Villa	7
+1572	Takumi Minamino	Noah Garcia	2000-11-05	2	0	Midfielder	8	4	204	81	t	0.73	2259906	Japan	Tottenham	3
+1573	Tyrone Mings	Olivia Smith	1990-04-04	2	0	Defender	34	7	203	64	t	0.76	2766123	England	Tottenham	9
+1574	Tyrick Mitchell	James Davis	1989-07-05	3	0	Defender	26	3	203	99	t	0.73	1107440	England	Manchester Utd	2
+1575	Kaoru Mitoma	John Johnson	1998-01-26	1	2	Forward	2	2	206	72	t	0.79	2364949	Japan	Liverpool	39
+1576	Aleksandar Mitrovic	Liam Brown	1995-10-20	1	2	Forward	24	3	205	88	t	0.72	1863199	Serbia	Arsenal	40
+1577	Jakub Moder	Michael Brown	1997-01-14	1	1	Midfielder	16	5	200	91	t	0.8	108246	Poland	Brighton	0
+1578	Mohamed Elneny	Michael Smith	1992-05-22	5	0	Midfielder	23	1	172	73	t	0.78	302256	Egypt	Everton	7
+1579	Mohamed Salah	Liam Davis	2002-11-02	4	2	Forward	9	7	178	84	t	0.72	1534920	Egypt	Brighton	24
+1580	Zane Monlouis	John Davis	2002-12-30	2	0	Defender	40	4	170	83	t	0.79	582548	England	Arsenal	9
+1581	Jacob Montes	Maria Garcia	1988-08-16	3	0	Midfielder	12	7	197	76	t	0.7000000000000001	2964336	Nicaragua	Manchester City	7
+1582	Fionn Mooney	Liam Jones	1986-02-17	2	2	Midfielder	9	8	202	77	t	0.8	2202578	England	Arsenal	3
+1583	Kieffer Moore	Noah Martinez	2001-10-24	5	0	Forward	27	5	197	82	t	0.73	2104239	Wales	Everton	32
+1584	Andrew Moran	Maria Smith	1991-01-25	0	2	Midfielder	32	7	189	87	t	0.75	231377	Ireland	Manchester City	0
+1585	Álex Moreno	Noah Garcia	1995-10-25	2	0	Defender	11	10	182	95	t	0.78	1718453	Spain	Manchester City	6
+1586	Jimmy Morgan	Maria Rodriguez	1991-02-15	0	2	Forward	24	4	174	70	t	0.8	1585618	England	Brighton	43
+1587	Nathan Moriah-Welsh	John Davis	2004-11-17	5	0	Midfielder	4	6	182	56	t	0.74	1288271	Guyana	Manchester Utd	2
+1588	Tyler Morton	Olivia Jones	1984-03-21	2	0	Midfielder	26	7	191	60	t	0.78	159980	England	Fulham	9
+1589	Yerson Mosquera	Liam Smith	1994-06-27	3	0	Defender	19	5	202	60	t	0.8	2034575	Colombia	Nott'ham Forest	9
+1590	Malik Mothersille	James Jones	1989-04-07	0	0	Forward	15	10	169	67	t	0.79	1975256	England	Wolves	22
+1591	Mason Mount	James Miller	1995-01-24	0	0	Midfielder	18	3	184	95	t	0.73	1393149	England	Bournemouth	8
+1592	Divin Mubama	Maria Smith	1995-02-09	2	0	Forward	23	3	188	98	t	0.77	115674	England	Newcastle Utd	38
+1593	Mykhailo Mudryk	Olivia Garcia	2005-08-29	5	0	Midfielder	26	5	179	59	t	0.73	957025	Ukraine	Newcastle Utd	6
+1594	Marqes Muir	Liam Martinez	1992-12-18	0	0	Defender	3	8	196	85	t	0.73	126256	England	Wolves	1
+1595	Romaine Mundle	Olivia Brown	1990-04-17	2	0	Midfielder	25	7	181	64	t	0.77	270960	England	Chelsea	3
+1596	Sam Murray	James Smith	1997-04-07	3	0	Defender	17	4	189	86	t	0.74	2726673	England	Leeds United	7
+1597	Mateusz Musialowski	Olivia Brown	1985-08-22	0	0	Forward	39	0	203	74	t	0.71	2661205	Poland	Leeds United	49
+1598	Yoshinori Muto	Alex Jones	1999-11-12	1	2	Forward	30	8	181	57	t	0.75	2491350	Japan	Manchester City	43
+1599	Enock Mwepu	Emma Rodriguez	2003-10-02	5	0	Midfielder	19	3	200	66	t	0.8	1757700	Zambia	West Ham	4
+1600	Vitalii Mykolenko	Sophia Johnson	2000-12-26	2	0	Defender	9	7	171	72	t	0.7000000000000001	1962125	Ukraine	Liverpool	3
+1601	Marvelous Nakamba	Emma Johnson	2004-08-28	4	1	Midfielder	19	9	210	96	t	0.72	284827	Zimbabwe	Wolves	8
+1602	Wilfred Ndidi	Sophia Jones	1989-07-04	5	0	Midfielder	22	10	210	90	t	0.79	1314092	Nigeria	Leeds United	4
+1603	Tanguy Ndombélé	John Garcia	1993-12-17	3	0	Midfielder	35	7	170	68	t	0.78	870395	France	Newcastle Utd	6
+1604	Reiss Nelson	Maria Davis	1992-06-12	1	0	Midfielder	35	9	199	97	t	0.79	1310240	England	Manchester Utd	6
+1605	Nélson Semedo	Alex Davis	1988-07-20	3	0	Defender	15	4	189	76	t	0.7000000000000001	2679887	Portugal	Tottenham	1
+1606	Moussa Niakhaté	Alex Smith	1995-09-29	4	0	Defender	22	2	170	75	t	0.74	2147515	Senegal	Everton	2
+1607	Saúl Ñíguez	Noah Smith	1991-07-04	0	0	Midfielder	21	8	175	79	t	0.78	1223097	Spain	Nott'ham Forest	10
+1608	Eddie Nketiah	John Miller	2005-04-20	2	0	Forward	23	3	174	58	t	0.7000000000000001	1550947	England	Newcastle Utd	22
+1609	Niels Nkounkou	Noah Garcia	1997-05-21	2	0	Defender	9	7	181	64	t	0.73	2511082	France	Manchester City	2
+1610	Daniel Nlundulu	Emma Brown	1992-05-07	4	0	Forward	19	7	188	64	t	0.72	2448487	England	Manchester City	22
+1612	James Norris	Noah Miller	2004-02-28	4	0	Defender	27	9	197	76	t	0.8	1755346	England	Bournemouth	6
+1613	Darwin Núñez	Maria Smith	1989-12-10	5	0	Forward	13	10	172	79	t	0.77	1871214	Uruguay	West Ham	38
+1614	Nuno da Costa	Sophia Rodriguez	1996-10-01	2	0	Midfielder	29	8	202	78	t	0.76	1413085		Wolves	6
+1615	Nuno Tavares	Michael Johnson	2005-08-10	3	0	Defender	22	1	174	90	t	0.76	109837	Portugal	West Ham	3
+1616	Ethan Nwaneri	Alex Rodriguez	1991-12-31	0	0	Midfielder	1	7	170	85	t	0.71	159647	England	Leeds United	5
+1617	Christian Nørgaard	Maria Johnson	2001-04-22	1	0	Midfielder	2	5	182	55	t	0.78	716349	Denmark	Nott'ham Forest	8
+1618	Jake O'Brien	Olivia Miller	1998-10-24	2	0	Defender	27	1	195	80	t	0.73	759802	Ireland	Bournemouth	4
+1619	Ollie O'Neill	Sophia Williams	1994-11-23	4	0	Midfielder	1	9	194	61	t	0.74	2213949	Ireland	Nott'ham Forest	2
+1620	Tommi O'Reilly	Emma Martinez	1984-11-06	4	0	Midfielder	32	4	177	88	t	0.71	404271	England	Arsenal	1
+1621	Michael Obafemi	Michael Davis	2000-07-31	1	0	Forward	20	9	203	83	t	0.74	453657	Ireland	Manchester Utd	24
+1622	Ademipo Odubeko	James Martinez	1985-03-22	5	0	Forward	13	8	169	68	t	0.78	1262912	Ireland	Bournemouth	45
+1623	Odeluga Offiah	James Garcia	1993-10-27	4	0	Defender	22	3	173	62	t	0.73	2739382	England	Brighton	1
+1624	Angelo Ogbonna	Olivia Rodriguez	1987-11-25	3	0	Defender	22	1	175	56	t	0.73	1950948	Italy	Liverpool	4
+1625	Mazeed Ogungbo	James Garcia	2002-04-04	3	0	Defender	35	10	183	90	t	0.73	2442302	Ireland	Southampton	8
+1626	Braian Ojeda	Emma Smith	1997-09-27	4	0	Midfielder	35	2	201	86	t	0.77	1300308	Paraguay	Everton	3
+1628	Armstrong Oko-Flex	James Rodriguez	1994-02-06	3	0	Forward	25	2	178	67	t	0.72	327565	Ireland	Brighton	50
+1629	Ferdinand Okoh	Michael Miller	1986-07-17	3	0	Midfielder	4	10	189	83	t	0.75	740464	England	Fulham	5
+1630	Ademola Ola-Adebomi	Alex Williams	1994-03-16	5	2	Forward	34	2	203	57	t	0.76	480541	England	Brentford	23
+1631	Kazeem Olaigbe	Michael Martinez	1998-12-06	3	0	Forward	15	1	182	95	t	0.77	559634	Belgium	Southampton	49
+1632	Michael Olakigbe	Olivia Martinez	2002-11-22	0	0	Forward	6	10	171	79	t	0.8	1116793	England	Manchester Utd	42
+1633	Michael Olise	Emma Jones	1995-03-19	5	0	Midfielder	26	7	197	87	t	0.8	1667447	France	Nott'ham Forest	1
+1634	David Omilabu	John Garcia	1993-07-03	5	0	Midfielder	19	1	187	82	t	0.72	2872346	England	Newcastle Utd	10
+1635	Tobi Omole	Maria Davis	1984-07-24	4	0	Defender	30	4	175	62	t	0.76	1505062	England	Leicester City	3
+1636	Amadou Onana	Alex Martinez	1993-12-09	2	0	Midfielder	19	3	198	74	t	0.73	1757298	Belgium	Brentford	10
+1637	Josh Onomah	Michael Jones	1987-07-26	4	1	Midfielder	23	0	183	70	t	0.8	255722	England	Manchester Utd	8
+1638	Paul Onuachu	Liam Garcia	1988-11-30	4	2	Forward	15	8	197	66	t	0.79	2759368	Nigeria	Leeds United	26
+1639	Tyler Onyango	Emma Jones	1991-05-30	4	0	Midfielder	8	2	206	67	t	0.7000000000000001	1912369	England	Manchester Utd	8
+1640	Frank Onyeka	Michael Brown	2005-07-23	0	0	Midfielder	26	1	177	65	t	0.78	414363	Nigeria	Wolves	0
+1641	Lewis Orford	Alex Williams	2003-04-19	1	0	Midfielder	8	5	177	82	t	0.78	341211	England	Everton	2
+1642	Divock Origi	Michael Martinez	1984-08-20	1	0	Forward	16	0	201	80	t	0.71	1657093	Belgium	Aston Villa	50
+1643	Mislav Orsic	Emma Miller	1985-11-22	3	0	Forward	12	9	192	54	t	0.8	2597325	Croatia	Wolves	34
+1644	Detlef Esapa Osong	Michael Davis	1991-07-08	2	1	Forward	14	5	189	88	t	0.75	767473	England	Tottenham	39
+1645	Owen Otasowie	Noah Rodriguez	1997-05-29	0	0	Midfielder	16	5	209	96	t	0.76	860049	United States	Nott'ham Forest	6
+1646	Jonny Otto	Noah Martinez	2003-07-21	3	2	Defender	30	1	186	58	t	0.78	1169212	Spain	Fulham	9
+1647	Dango Ouattara	John Miller	1987-10-10	3	0	Forward	23	4	191	84	t	0.7000000000000001	1614312	Burkina Faso	Brentford	27
+1648	Salah-Eddine Oulad M'hand	John Rodriguez	1999-11-06	5	0	Midfielder	20	2	191	97	t	0.8	2855274	Netherlands	Crystal Palace	1
+1649	Alex Oxlade-Chamberlain	Emma Rodriguez	1988-02-15	4	0	Midfielder	8	3	177	66	t	0.76	2492177	England	Everton	0
+1650	Maxi Oyedele	Maria Smith	1999-11-22	0	0	Midfielder	16	5	190	75	t	0.78	1024762	Poland	Nott'ham Forest	1
+1651	Daniel Oyegoke	Olivia Garcia	2000-03-09	3	0	Defender	0	10	198	72	t	0.75	2889148	England	Brighton	0
+1652	David Ozoh	James Williams	1990-03-10	2	0	Midfielder	8	9	170	66	t	0.74	798023	England	Fulham	4
+1653	Adrion Pajaziti	Liam Martinez	2002-06-30	5	0	Midfielder	21	6	174	94	t	0.77	1176146	Albania	Manchester City	10
+1654	Cole Palmer	John Miller	1994-05-30	1	0	Midfielder	14	5	197	60	t	0.76	2501895	England	Liverpool	2
+1655	Jonathan Panzo	John Smith	1999-12-08	4	0	Defender	27	2	210	78	t	0.7000000000000001	479863	England	West Ham	4
+1656	Stefan Parkes	Alex Miller	1986-10-15	3	0	Defender	35	1	188	67	t	0.71	1460888	England	Leeds United	10
+1657	Troy Parrott	Maria Martinez	1996-11-01	3	0	Forward	33	5	194	90	t	0.74	678885	Ireland	Nott'ham Forest	29
+1658	Thomas Partey	Liam Jones	1985-04-07	2	0	Midfielder	2	8	209	86	t	0.74	963490	Ghana	Bournemouth	8
+1659	Maksim Paskotsi	Olivia Garcia	1996-02-19	2	0	Defender	38	9	190	73	t	0.73	2144266	Estonia	Chelsea	2
+1660	Charlie Patino	Emma Smith	1998-03-27	0	0	Midfielder	5	4	182	90	t	0.77	2728087	England	Manchester City	8
+1661	Travis Patterson	Maria Williams	2005-02-26	1	1	Midfielder	28	1	175	86	t	0.72	1940195	England	Aston Villa	3
+1662	Lewis Payne	Olivia Brown	1992-06-21	3	1	Defender	32	10	207	57	t	0.72	1005681	England	Wolves	0
+1663	Ben Pearson	John Miller	1990-03-03	3	0	Midfielder	1	10	183	57	t	0.73	2448197	England	Chelsea	0
+1664	Myles Peart-Harris	Noah Martinez	1984-03-14	1	0	Midfielder	25	9	193	55	t	0.72	2213509	England	Fulham	6
+1665	Pedro Neto	Emma Rodriguez	2004-03-21	1	2	Forward	29	5	197	77	t	0.76	1007760	Portugal	Tottenham	25
+1666	Facundo Pellistri	Liam Davis	1991-05-01	2	1	Midfielder	24	1	195	82	t	0.72	1867037	Uruguay	Manchester Utd	7
+1667	Nicolas Pépé	Noah Johnson	1999-03-31	2	0	Forward	6	10	187	92	t	0.74	781194	Cote D’Ivoire	Southampton	45
+1668	Ayoze Pérez	Liam Miller	1996-12-13	0	0	Forward	26	3	204	75	t	0.72	1854043	Spain	Crystal Palace	24
+1669	Ivan Perisic	Michael Johnson	1991-04-27	2	0	Midfielder	12	5	205	90	t	0.76	621133	Croatia	Leeds United	2
+1670	Sonny Perkins	John Williams	1988-07-24	4	0	Forward	8	10	192	91	t	0.76	1118874	England	Leeds United	38
+1671	Romain Perraud	Olivia Jones	2001-03-03	5	0	Defender	17	8	180	67	t	0.71	866589	France	Brentford	3
+1672	Máximo Perrone	Olivia Jones	1994-03-17	0	2	Midfielder	35	1	206	84	t	0.79	104892	Argentina	Nott'ham Forest	8
+1673	Cameron Peupion	Michael Smith	1987-11-19	3	0	Midfielder	20	10	199	68	t	0.72	1507236	Australia	Leicester City	9
+1674	Philippe Coutinho	John Brown	2005-01-08	4	0	Midfielder	15	7	202	89	t	0.73	1189423	Brazil	Wolves	6
+1675	Nathaniel Phillips	Maria Williams	1992-09-03	2	0	Defender	33	9	197	75	t	0.77	66551	England	Bournemouth	2
+1676	Jaden Philogene	Alex Smith	1990-06-22	1	0	Midfielder	4	9	176	64	t	0.74	1474946	England	Bournemouth	5
+1677	Ethan Pinnock	Emma Jones	1985-04-27	2	0	Defender	31	8	177	55	t	0.74	2848369	Jamaica	Chelsea	4
+1678	Luke Plange	Noah Jones	1984-01-29	1	0	Forward	3	7	182	93	t	0.77	788825	England	Aston Villa	42
+1679	Paul Pogba	Emma Rodriguez	1990-01-30	2	0	Midfielder	13	3	208	65	t	0.75	2060050	France	Southampton	8
+1680	Euan Pollock	Alex Johnson	1996-07-27	0	0	Forward	28	4	195	95	t	0.74	1886757	England	Southampton	44
+1681	Pedro Porro	Noah Martinez	2001-09-24	1	0	Defender	23	5	177	69	t	0.73	1535647	Spain	West Ham	2
+1682	Freddie Potts	Sophia Garcia	1999-01-28	4	0	Midfielder	15	6	193	92	t	0.77	2389036	England	Southampton	0
+1683	Ian Poveda	James Martinez	1989-09-06	1	0	Forward	25	0	195	54	t	0.7000000000000001	691510	England	Manchester Utd	27
+1684	Dennis Praet	Sophia Rodriguez	2000-01-29	4	0	Midfielder	20	10	181	86	t	0.78	1300682	Belgium	Arsenal	0
+1685	Aaron Pressley	John Brown	1987-03-04	0	0	Forward	22	0	204	90	t	0.78	1928815	Scotland	Bournemouth	49
+1686	Isaac Price	James Garcia	1999-08-11	3	2	Midfielder	16	1	205	90	t	0.79	2135597	Northern Ireland	Arsenal	6
+1687	Christian Pulisic	Maria Brown	1991-05-23	1	0	Midfielder	40	10	184	76	t	0.75	2489254	United States	Liverpool	7
+1688	Jarell Quansah	James Garcia	1986-01-11	4	0	Defender	20	0	187	94	t	0.7000000000000001	1895679	England	Brighton	6
+1689	Daniel Quick	Sophia Johnson	1993-07-04	3	0	Defender	32	5	202	58	t	0.79	2197760	England	Tottenham	2
+1690	Sebastian Quirk	Michael Jones	2003-11-11	0	1	Midfielder	40	7	203	60	t	0.76	1099238	England	Fulham	9
+1691	Luka Racic	John Miller	1995-06-01	4	1	Defender	32	10	196	56	t	0.76	1765736	Denmark	Leeds United	1
+1692	Arjan Raikhy	Olivia Garcia	1993-04-03	2	0	Midfielder	39	5	208	64	t	0.72	1907718	England	Arsenal	7
+1693	Jesurun Rak-Sakyi	Olivia Brown	1997-12-19	5	0	Midfielder	2	10	196	59	t	0.8	1116132	England	Tottenham	9
+1694	Calvin Ramsay	Michael Martinez	1992-11-11	2	0	Defender	15	9	190	82	t	0.74	2579116	Scotland	Fulham	7
+1695	Jacob Ramsey	Noah Martinez	1994-09-14	2	0	Midfielder	38	7	185	59	t	0.8	149192	England	Leicester City	7
+1696	Dion Rankine	Sophia Martinez	2005-12-22	1	0	Midfielder	10	10	171	76	t	0.78	2685918	England	Manchester Utd	5
+1697	Raphinha	Sophia Garcia	1985-01-02	3	0	Forward	40	10	199	68	t	0.79	2693763	Brazil	Southampton	33
+1698	Marcus Rashford	Noah Rodriguez	2003-07-25	2	0	Forward	10	1	202	90	t	0.77	743115	England	Wolves	45
+1699	Jadan Raymond	Liam Miller	1990-10-28	1	1	Midfielder	37	0	209	59	t	0.74	1240904	Wales	Crystal Palace	2
+1700	Tim Ream	Emma Johnson	1985-12-25	2	0	Defender	12	10	169	84	t	0.78	1745934	United States	Liverpool	7
+1701	Nathan Redmond	Sophia Miller	1993-02-14	0	0	Midfielder	26	4	182	96	t	0.72	2336330	England	Arsenal	5
+1702	Harrison Reed	Sophia Williams	1992-09-04	1	1	Midfielder	22	7	169	83	t	0.74	2082290	England	Everton	9
+1703	Sergio Reguilón	John Garcia	1984-11-28	5	1	Defender	33	6	195	72	t	0.75	2031816	Spain	Leeds United	5
+1704	Renan Lodi	John Brown	1987-01-17	5	0	Defender	36	0	173	94	t	0.77	1794672	Brazil	Bournemouth	3
+1705	Dominic Revan	John Jones	1995-12-12	5	0	Defender	5	8	176	82	t	0.73	1214588	England	Tottenham	6
+1706	Ricardo Pereira	Alex Miller	2004-06-07	1	2	Defender	25	8	207	96	t	0.71	2835571	Portugal	Arsenal	5
+1707	Declan Rice	Olivia Miller	1994-03-26	3	0	Midfielder	25	3	185	72	t	0.71	2023008	England	Manchester Utd	1
+1708	Taylor Richards	Emma Miller	1994-07-24	4	0	Midfielder	33	4	201	84	t	0.76	2051328	England	Manchester Utd	2
+1709	Richarlison	John Smith	1986-05-07	2	0	Forward	21	4	204	58	t	0.74	1897888	Brazil	Fulham	29
+1710	Jairo Riedewald	Maria Smith	1992-01-30	0	0	Midfielder	32	4	176	64	t	0.79	1108981	Netherlands	Leicester City	2
+1711	Matt Ritchie	John Williams	1988-09-25	2	0	Midfielder	13	3	207	55	t	0.71	1556101	Scotland	Everton	1
+1712	Roberto Firmino	James Johnson	1990-03-01	1	0	Forward	28	9	200	75	t	0.78	2619972	Brazil	Brentford	38
+1713	Haydon Roberts	Sophia Johnson	2000-12-16	5	2	Defender	19	10	174	64	t	0.79	2708249	England	Wolves	4
+1714	Andy Robertson	Maria Martinez	1992-06-02	1	2	Defender	29	7	181	76	t	0.73	1984108	Scotland	Bournemouth	8
+1715	Antonee Robinson	Noah Miller	1993-05-25	1	0	Defender	40	8	193	94	t	0.8	2829015	United States	Crystal Palace	2
+1716	Max Robson	Liam Garcia	1990-10-29	3	0	Midfielder	21	0	193	93	t	0.78	735246	England	Arsenal	5
+1717	Marc Roca	John Davis	2000-03-03	5	2	Midfielder	16	8	204	86	t	0.72	1728642	Spain	Wolves	0
+1718	Kaden Rodney	Liam Jones	1991-02-17	0	0	Midfielder	25	3	204	68	t	0.75	1676833	England	Nott'ham Forest	8
+1719	Joe Rodon	John Rodriguez	2004-06-16	2	2	Defender	24	5	178	76	t	0.77	1148020	Wales	Southampton	7
+1720	Rodri	Liam Smith	1994-01-25	3	0	Midfielder	24	2	191	83	t	0.76	904731	Spain	Newcastle Utd	2
+1721	Rodrigo	Sophia Johnson	1998-09-30	3	0	Forward	34	7	203	98	t	0.71	838904	Spain	Chelsea	22
+1722	Rodrigo Muniz	John Martinez	1992-09-22	0	0	Forward	13	6	175	86	t	0.76	1083214	Brazil	West Ham	29
+1723	James Rodríguez	Sophia Brown	1997-11-11	3	0	Midfielder	30	10	197	71	t	0.77	2128333	Colombia	Fulham	9
+1724	Mads Roerslev	John Jones	1996-11-16	5	0	Defender	6	1	193	74	t	0.73	998767	Denmark	Manchester City	7
+1725	Morgan Rogers	Liam Smith	1998-05-05	2	1	Forward	16	1	180	87	t	0.7000000000000001	741704	England	Aston Villa	49
+1726	Cristian Romero	Emma Smith	1989-12-13	5	0	Defender	0	1	188	76	t	0.74	2023271	Argentina	Manchester City	6
+1727	Oriol Romeu	Sophia Jones	1993-12-19	3	0	Midfielder	2	9	177	66	t	0.76	413850	Spain	Southampton	1
+1728	Connor Ronan	John Martinez	1999-08-01	0	0	Midfielder	29	5	171	68	t	0.74	428254	Ireland	West Ham	9
+1729	Salomón Rondón	James Jones	1996-01-13	1	0	Forward	36	10	184	91	t	0.73	70345	Venezuela	Brentford	28
+1730	Zeno Rossi	Emma Jones	1998-07-15	3	0	Defender	16	4	185	76	t	0.7000000000000001	2480242	England	Chelsea	7
+1731	Joe Rothwell	Olivia Garcia	2003-06-10	5	0	Midfielder	36	1	194	61	t	0.75	701891	England	Southampton	3
+1732	Rúben Dias	Michael Johnson	1998-08-17	0	0	Defender	12	1	170	75	t	0.76	2368220	Portugal	Manchester City	4
+1733	Rúben Neves	Sophia Johnson	1990-07-06	5	0	Midfielder	6	5	183	54	t	0.74	2600066	Portugal	Newcastle Utd	10
+1734	Rúben Vinagre	Alex Martinez	1992-07-28	0	0	Defender	17	0	210	72	t	0.74	2292073	Portugal	Chelsea	7
+1735	Antonio Rüdiger	James Jones	2003-04-18	2	0	Defender	36	10	199	85	t	0.72	1665749	Germany	West Ham	3
+1736	Georginio Rutter	John Jones	1984-07-07	4	0	Forward	37	2	176	97	t	0.71	1854953	France	Chelsea	20
+1737	Marcel Sabitzer	Olivia Martinez	1998-11-23	5	0	Midfielder	27	6	180	93	t	0.75	829432	Austria	Crystal Palace	3
+1738	Dominic Sadi	Emma Garcia	2004-02-06	1	0	Midfielder	13	4	184	92	t	0.71	1036338	England	Manchester Utd	4
+1739	Charles Sagoe	Michael Jones	1989-11-25	3	0	Forward	36	6	189	67	t	0.79	352091	England	Manchester City	47
+1740	Allan Saint-Maximin	Alex Davis	2001-03-25	0	1	Forward	17	2	180	83	t	0.73	2249462	France	Everton	35
+1741	Romain Saïss	Michael Martinez	1994-12-16	5	0	Defender	2	8	206	77	t	0.71	2473268	Morocco	Manchester City	7
+1742	Bukayo Saka	Sophia Brown	1984-08-10	1	0	Forward	8	2	184	85	t	0.77	1711047	England	Wolves	41
+1743	William Saliba	Michael Jones	2000-07-23	5	0	Defender	40	3	178	89	t	0.78	1553271	France	Chelsea	0
+1744	Mohammed Salisu	Emma Martinez	2001-08-02	3	0	Defender	14	9	179	96	t	0.76	816822	Ghana	Wolves	8
+1745	Albert Sambi Lokonga	Emma Martinez	1988-10-27	3	0	Midfielder	5	4	176	66	t	0.7000000000000001	593304	Belgium	Southampton	5
+1746	Lakyle Samuel	Sophia Brown	2002-08-06	2	0	Defender	5	0	181	83	t	0.7000000000000001	1380120	England	Aston Villa	0
+1747	Imari Samuels	Maria Williams	1993-10-05	3	2	Defender	0	3	173	94	t	0.75	2775104	England	Tottenham	2
+1748	Ishé Samuels-Smith	Olivia Williams	1990-09-02	2	0	Defender	28	9	209	60	t	0.71	1655254	England	Tottenham	2
+1749	Jadon Sancho	Maria Davis	2003-03-01	4	0	Forward	35	3	174	70	t	0.8	2087103	England	Everton	34
+1750	Dion Sanderson	John Miller	1984-08-03	1	0	Defender	11	3	184	59	t	0.79	1486410	England	Nott'ham Forest	7
+1751	Philippe Sandler	Emma Rodriguez	1992-01-13	1	0	Defender	2	0	198	80	t	0.71	2979620	Netherlands	Manchester Utd	1
+1752	Morgan Sanson	Olivia Johnson	2001-11-17	2	0	Midfielder	15	3	196	57	t	0.77	847178	France	Manchester City	3
+1753	Pablo Sarabia	Sophia Davis	2005-02-22	1	0	Midfielder	16	9	196	80	t	0.72	2077068	Spain	Fulham	6
+1754	Jeremy Sarmiento	Maria Davis	1996-02-07	5	0	Forward	31	0	173	96	t	0.8	2284161	Ecuador	Manchester City	29
+1755	Malang Sarr	Sophia Rodriguez	1997-12-17	2	0	Defender	27	7	185	79	t	0.73	195677	France	Tottenham	4
+1756	Charlie Savage	Noah Johnson	1986-02-18	5	0	Midfielder	22	2	173	84	t	0.71	685825	Wales	Aston Villa	10
+1757	Christian Saydee	Noah Miller	1997-12-19	0	0	Forward	10	10	188	56	t	0.76	78136	England	Manchester City	30
+1758	Charlie Sayers	Liam Brown	2004-07-26	3	2	Defender	7	9	177	74	t	0.75	1887314	England	Leicester City	9
+1759	Gianluca Scamacca	John Jones	2005-07-13	4	1	Forward	19	0	175	88	t	0.74	1008629	Italy	Arsenal	24
+1760	Oliver Scarles	Alex Jones	1988-07-19	2	1	Midfielder	37	7	202	65	t	0.74	2559704	England	Chelsea	5
+1761	Dane Scarlett	Olivia Johnson	1995-07-27	2	0	Forward	20	8	181	90	t	0.78	2369475	England	Leicester City	44
+1762	Kevin Schade	Olivia Garcia	1994-06-18	0	0	Midfielder	18	8	176	68	t	0.73	1164953	Germany	Leeds United	10
+1763	Fabian Schär	Liam Brown	2004-07-22	0	0	Defender	38	4	181	56	t	0.72	1623874	Switzerland	Everton	1
+1764	Jeffrey Schlupp	Noah Jones	1993-02-18	1	0	Midfielder	10	10	181	97	t	0.71	2755649	Ghana	Tottenham	8
+1765	Kristian Sekularac	Michael Garcia	2000-04-30	0	0	Midfielder	21	7	209	97	t	0.7000000000000001	1785683	Switzerland	Nott'ham Forest	9
+1766	Antoine Semenyo	Sophia Rodriguez	1987-04-06	1	0	Forward	34	5	203	80	t	0.7000000000000001	2331693	Ghana	Chelsea	42
+1767	Marcos Senesi	Noah Smith	1996-09-10	1	0	Defender	20	10	195	99	t	0.71	1155000	Argentina	Brentford	7
+1768	Jean Michaël Seri	Olivia Brown	1994-11-01	5	0	Midfielder	8	10	195	55	t	0.74	1516496	Cote D’Ivoire	Wolves	0
+1769	Steven Sessegnon	Noah Davis	1990-12-21	3	0	Defender	27	6	176	96	t	0.78	472668	England	Liverpool	2
+1770	Jamie Shackleton	Liam Jones	2004-05-13	1	0	Midfielder	7	0	174	72	t	0.75	2568018	England	Brentford	10
+1771	Xherdan Shaqiri	Maria Garcia	1985-06-24	0	0	Midfielder	30	9	209	59	t	0.8	417567	Switzerland	Brentford	9
+1772	Luke Shaw	Emma Miller	1988-02-22	4	0	Defender	35	6	174	90	t	0.79	1057075	England	Everton	1
+1773	Joe Sheridan	John Miller	1984-01-06	3	0	Defender	0	8	201	61	t	0.73	2690023	England	Crystal Palace	10
+1774	Shola Shoretire	John Davis	1998-09-26	3	1	Forward	6	4	194	73	t	0.74	339872	England	Brighton	35
+1775	Abdallah Sima	Sophia Smith	2001-08-25	4	0	Forward	6	9	188	70	t	0.7000000000000001	1122738	Senegal	Leicester City	35
+1776	Dynel Simeu	Liam Miller	1994-06-25	2	0	Defender	27	7	196	75	t	0.75	1974399	England	Liverpool	10
+1777	Ellis Simms	Liam Jones	2002-08-16	4	0	Forward	35	3	199	72	t	0.74	2043151	England	Wolves	45
+1778	Kamarai Simon-Swyer	Maria Miller	2002-10-22	4	0	Midfielder	40	0	210	88	t	0.74	1044881	England	Fulham	10
+1779	Xavier Simons	Liam Williams	1984-03-25	5	0	Midfielder	29	9	204	77	t	0.78	2452901	England	Tottenham	8
+1780	Luis Sinisterra	Alex Miller	1991-01-03	2	1	Forward	40	2	183	54	t	0.79	1871841	Colombia	Brighton	36
+1781	Moussa Sissoko	Michael Miller	1990-01-13	1	0	Midfielder	9	0	208	88	t	0.73	71354	France	Brentford	10
+1782	Oliver Skipp	Michael Davis	2004-12-18	2	0	Midfielder	1	4	177	80	t	0.8	2115460	England	Brentford	5
+1783	Thierry Small	Alex Miller	1997-10-22	2	0	Defender	12	9	188	70	t	0.7000000000000001	1788990	England	Nott'ham Forest	1
+1784	Will Smallbone	Liam Martinez	2002-09-03	1	0	Midfielder	39	1	203	81	t	0.71	1736292	Ireland	Aston Villa	7
+1785	Matt Smith	Maria Johnson	2004-01-12	1	0	Midfielder	39	10	180	79	t	0.72	1177527	England	Newcastle Utd	9
+1786	Emile Smith Rowe	Liam Johnson	1993-02-21	4	0	Midfielder	31	9	199	93	t	0.75	1368296	England	Arsenal	7
+1787	Joe Snowdon	Liam Martinez	2004-10-05	4	1	Midfielder	37	0	176	63	t	0.75	1158400	England	Manchester Utd	8
+1788	Dominic Solanke	James Brown	1987-09-12	2	0	Forward	33	3	176	99	t	0.71	1790965	England	Leeds United	40
+1789	Manor Solomon	Alex Johnson	2002-09-20	4	0	Forward	29	3	170	79	t	0.72	2305544	Israel	Southampton	26
+1790	Son Heung-Min	James Rodriguez	1987-05-17	1	2	Forward	0	5	191	69	t	0.72	416324	South Korea	Leicester City	29
+1791	Jude Soonsup-Bell	Alex Brown	2005-11-13	1	0	Forward	22	9	194	64	t	0.72	1486091	England	Fulham	49
+1792	Tomás Soucek	Sophia Rodriguez	1994-09-11	0	0	Midfielder	6	4	188	55	t	0.79	1256721	Czech Republic	Wolves	4
+1793	Boubakary Soumaré	Maria Martinez	1988-03-03	5	2	Midfielder	37	2	193	88	t	0.75	1194462	France	Leicester City	1
+1794	Lino Sousa	Michael Brown	1995-07-06	1	1	Defender	20	4	207	88	t	0.7000000000000001	323988	England	West Ham	3
+1795	Harry Souttar	Liam Garcia	2005-03-27	5	0	Defender	3	3	185	67	t	0.7000000000000001	2050004	Australia	Wolves	5
+1796	Kamal Sowah	Sophia Martinez	1989-01-31	0	0	Forward	17	2	198	55	t	0.76	2532846	Ghana	Brentford	34
+1797	Çaglar Söyüncü	Alex Garcia	1991-11-01	1	0	Defender	26	8	194	73	t	0.79	81106	Turkey	Newcastle Utd	2
+1798	Djed Spence	Liam Martinez	2003-12-13	1	0	Defender	3	0	195	85	t	0.74	146211	England	Crystal Palace	0
+1799	Jack Spong	John Jones	2003-04-13	3	0	Midfielder	17	5	185	67	t	0.75	2310414	England	Leicester City	1
+1800	Jack Stacey	Noah Jones	1986-03-21	0	0	Defender	20	7	200	87	t	0.78	2185965	England	Nott'ham Forest	9
+1801	Junior Stanislas	Emma Davis	1987-06-10	5	2	Midfielder	1	8	191	87	t	0.77	2271811	England	Leicester City	1
+1802	Jay Stansfield	James Jones	1994-05-19	3	2	Forward	31	9	210	82	t	0.74	1805690	England	West Ham	36
+1803	Jack Stephens	Alex Johnson	1993-01-29	1	1	Defender	13	7	180	93	t	0.74	2471366	England	Tottenham	7
+1804	Raheem Sterling	James Brown	1987-06-18	2	1	Forward	2	6	170	83	t	0.77	2085938	England	Brentford	28
+1805	Finley Stevens	Emma Rodriguez	1990-03-19	1	2	Defender	3	0	176	97	t	0.78	1323082	Wales	Arsenal	2
+1806	Layton Stewart	Alex Rodriguez	2002-07-28	0	0	Forward	20	5	169	68	t	0.79	1174904	England	Fulham	22
+1807	John Stones	Olivia Rodriguez	2000-05-02	0	0	Defender	12	10	210	76	t	0.71	2389522	England	Crystal Palace	0
+1808	Robert Street	John Smith	1996-02-07	4	0	Forward	4	9	201	92	t	0.72	1172787	England	Tottenham	33
+1809	Pascal Struijk	Sophia Davis	1984-12-14	5	2	Defender	20	6	177	73	t	0.77	2955494	Netherlands	Aston Villa	7
+1810	Stuart Armstrong	Maria Brown	1984-06-06	1	0	Midfielder	29	10	197	89	t	0.75	2181016	Scotland	Manchester Utd	6
+1811	Thanawat Suengchitthawon	Alex Martinez	1987-03-02	3	0	Midfielder	6	8	189	95	t	0.7000000000000001	996442	Thailand	West Ham	1
+1812	Kamaldeen Sulemana	Michael Jones	1986-04-08	2	0	Midfielder	11	1	170	67	t	0.71	2891719	Ghana	Newcastle Utd	8
+1813	Crysencio Summerville	Michael Garcia	1999-06-26	3	0	Forward	26	3	197	89	t	0.79	1740448	Netherlands	West Ham	27
+1814	Sam Surridge	Michael Garcia	1990-08-05	2	0	Forward	34	2	193	75	t	0.77	362916	England	Manchester Utd	20
+1815	Will Swan	Alex Rodriguez	1999-12-01	2	0	Forward	12	2	208	83	t	0.79	502061	England	Southampton	24
+1816	Zak Swanson	Emma Williams	1988-05-02	4	0	Defender	17	10	208	75	t	0.75	927370	England	Brentford	3
+1817	Sil Swinkels	Michael Garcia	1985-01-26	0	0	Defender	4	7	190	99	t	0.75	1505984	Netherlands	Chelsea	2
+1818	Japhet Tanganga	Alex Rodriguez	1995-08-12	1	0	Defender	35	10	205	54	t	0.79	2691075	England	Brighton	8
+1819	Matt Targett	Emma Miller	1993-04-11	2	0	Defender	2	3	204	56	t	0.74	110307	England	Southampton	5
+1820	James Tarkowski	Noah Johnson	2000-02-23	5	1	Defender	27	5	193	98	t	0.79	577609	England	Brighton	10
+1821	Percy Tau	Alex Jones	2005-10-27	4	0	Forward	2	0	194	83	t	0.7000000000000001	859067	South Africa	Fulham	38
+1822	Marcus Tavernier	James Williams	1995-02-22	0	0	Midfielder	15	1	190	78	t	0.71	2991327	England	Arsenal	0
+1823	Dale Taylor	Sophia Garcia	1997-01-03	2	0	Forward	29	8	197	64	t	0.72	908823	Northern Ireland	Everton	28
+1824	Slobodan Tedic	James Smith	1989-11-11	0	0	Forward	3	0	177	85	t	0.8	1845793	Serbia	Manchester Utd	20
+1825	Nathan Tella	James Davis	1996-02-06	5	0	Midfielder	19	7	174	90	t	0.72	1447044	Nigeria	West Ham	3
+1826	Kenny Tete	Alex Williams	1996-12-31	2	1	Defender	3	3	210	81	t	0.74	1278138	Netherlands	Liverpool	8
+1827	Thiago Silva	Michael Garcia	2005-12-03	2	2	Defender	7	5	172	61	t	0.73	1821989	Brazil	Leicester City	0
+1828	Luke Thomas	Liam Williams	2000-12-02	0	0	Defender	36	0	190	59	t	0.75	2322827	England	Nott'ham Forest	8
+1829	Dominic Thompson	James Williams	2004-02-27	4	1	Defender	21	4	185	74	t	0.79	2970407	England	Everton	6
+1830	Youri Tielemans	Sophia Rodriguez	1996-05-15	4	0	Midfielder	10	7	201	82	t	0.76	2375213	Belgium	Tottenham	7
+1831	Kieran Tierney	Emma Johnson	2003-07-31	1	0	Defender	5	4	186	56	t	0.78	2307318	Scotland	Aston Villa	6
+1832	Tobias Figueiredo	Olivia Miller	2003-07-07	5	0	Defender	12	7	192	60	t	0.8	552072	Portugal	West Ham	3
+1833	Harry Toffolo	James Rodriguez	1993-11-11	1	0	Defender	39	0	177	61	t	0.72	2882431	England	Tottenham	7
+1834	Takehiro Tomiyasu	Noah Garcia	1984-12-20	0	1	Defender	33	2	200	65	t	0.79	2192364	Japan	Wolves	6
+1835	James Tomkins	Liam Brown	1984-04-06	4	0	Defender	25	9	179	72	t	0.76	2925937	England	Tottenham	0
+1836	Ivan Toney	Liam Brown	1987-11-09	1	0	Forward	22	9	179	90	t	0.77	1268886	England	Leicester City	42
+1837	Lucas Torreira	John Rodriguez	1994-06-17	4	1	Midfielder	5	1	176	81	t	0.77	621571	Uruguay	Nott'ham Forest	4
+1838	Ferran Torres	Liam Rodriguez	1994-04-08	2	1	Forward	27	4	208	73	t	0.71	1873129	Spain	Nott'ham Forest	23
+1839	Cenk Tosun	James Martinez	2004-05-18	2	0	Forward	38	1	196	57	t	0.79	1647144	Turkey	Brentford	45
+1840	Toti Gomes	Olivia Rodriguez	2001-02-07	0	0	Defender	16	7	208	59	t	0.72	1709561	Portugal	Brentford	9
+1841	Andros Townsend	Maria Miller	2003-11-18	0	0	Midfielder	33	2	186	62	t	0.76	1520982	England	Fulham	7
+1842	Bertrand Traoré	Michael Martinez	1990-06-26	3	0	Forward	15	8	197	84	t	0.76	2518500	Burkina Faso	Southampton	35
+1843	Ryan Trevitt	Noah Smith	1999-10-20	4	0	Midfielder	3	3	202	67	t	0.77	2503762	England	Aston Villa	5
+1844	Trézéguet	Liam Rodriguez	1988-12-03	5	0	Midfielder	25	9	170	82	t	0.7000000000000001	676990	Egypt	Leicester City	4
+1845	Trincão	Alex Williams	2004-12-02	3	0	Forward	12	4	173	99	t	0.7000000000000001	1453095	Portugal	Liverpool	36
+1476	Marc Leonard	John Martinez	1992-08-07	0	0	Midfielder	27	2	170	90	t	0.75	2422881	Scotland	Nott'ham Forest	1
+967	Brenden Aaronson	Noah Smith	1986-08-03	3	0	Midfielder	22	0	183	85	t	0.75	1155032	United States	Tottenham	1
+968	Zach Abbott	Olivia Smith	1985-08-10	2	0	Defender	24	0	197	94	t	0.72	1704149	England	Arsenal	2
+969	Terry Ablade	James Williams	2003-10-09	4	0	Forward	21	10	201	78	t	0.79	1787322	Finland	Aston Villa	28
+970	Tammy Abraham	Noah Brown	2000-06-15	2	0	Forward	33	0	186	63	t	0.74	2479389	England	Aston Villa	30
+971	Adam Armstrong	Sophia Miller	1998-10-05	0	0	Forward	10	0	169	91	t	0.72	2076684	England	Bournemouth	41
+972	Tyler Adams	Sophia Johnson	1990-04-21	4	0	Midfielder	22	5	191	86	t	0.73	2547238	United States	Chelsea	5
+1896	Willian	James Garcia	2001-07-22	0	0	Forward	29	3	170	65	t	0.7000000000000001	2041327	Brazil	Wolves	36
+1846	Kieran Trippier	John Brown	1989-01-28	4	1	Defender	26	9	171	67	t	0.8	688832	England	Leicester City	1
+1847	Leandro Trossard	Emma Jones	1989-01-25	5	1	Forward	5	3	190	57	t	0.73	1109757	Belgium	Bournemouth	33
+1848	Auston Trusty	Noah Johnson	1998-04-28	5	0	Defender	20	4	174	69	t	0.71	82748	United States	Manchester City	10
+1849	Kostas Tsimikas	Maria Brown	1987-03-01	2	0	Defender	23	6	210	98	t	0.74	1250731	Greece	Leeds United	4
+1850	Antef Tsoungui	Emma Davis	1999-02-14	4	0	Defender	35	3	186	68	t	0.72	216058	Belgium	Arsenal	6
+1851	Axel Tuanzebe	Liam Jones	1989-12-10	3	0	Defender	8	10	184	82	t	0.77	2023467	England	Arsenal	3
+1852	Ed Turns	Sophia Johnson	1986-09-12	0	0	Defender	28	2	169	94	t	0.7000000000000001	2896108	Wales	Chelsea	3
+1853	Tyler Roberts	James Martinez	1998-05-28	0	0	Forward	28	4	209	95	t	0.8	701093	Wales	Southampton	29
+1854	Destiny Udogie	Noah Smith	1984-09-16	1	2	Defender	15	9	175	68	t	0.77	1686169	Italy	Arsenal	8
+1855	Deniz Undav	James Davis	1992-01-27	4	0	Forward	12	1	184	60	t	0.79	326032	Germany	Manchester City	31
+1856	Harvey Vale	Olivia Davis	1987-09-15	4	0	Midfielder	22	0	177	55	t	0.71	1335735	England	Wolves	0
+1857	Joel Valencia	Alex Smith	1991-07-22	4	0	Forward	3	0	170	78	t	0.7000000000000001	2835500	Ecuador	Fulham	50
+1858	Yan Valery	Noah Johnson	2004-05-02	2	0	Defender	25	9	173	91	t	0.75	2530877	Tunisia	Southampton	4
+1859	Donny van de Beek	Sophia Johnson	1988-11-25	4	0	Midfielder	22	8	204	77	t	0.8	2594713	Netherlands	Liverpool	1
+1860	Sepp van den Berg	Liam Davis	2005-03-19	1	0	Defender	18	4	178	59	t	0.74	2856771	Netherlands	Newcastle Utd	2
+1861	Virgil van Dijk	Noah Garcia	1999-06-14	1	0	Defender	17	0	185	71	t	0.79	914350	Netherlands	Southampton	5
+1862	Jan Paul van Hecke	Sophia Davis	1996-08-25	2	0	Defender	37	7	198	85	t	0.79	1598745	Netherlands	Wolves	1
+1863	Raphaël Varane	James Miller	1988-01-24	3	0	Defender	10	0	169	63	t	0.76	1803544	France	West Ham	5
+1864	Jamie Vardy	Emma Williams	1988-07-29	0	0	Forward	27	6	188	75	t	0.79	2464555	England	Leeds United	23
+1865	Joël Veltman	Olivia Johnson	1991-09-20	0	0	Defender	36	8	179	85	t	0.73	2326303	Netherlands	West Ham	3
+1873	Kyle Walker	Emma Miller	1985-08-03	2	1	Defender	36	2	197	84	t	0.76	383424	England	Manchester Utd	0
+1874	Kyle Walker-Peters	Liam Smith	1997-10-02	0	0	Defender	23	2	189	61	t	0.75	651089	England	Chelsea	9
+1875	Reuell Walters	Emma Williams	1990-07-07	2	0	Defender	19	1	174	73	t	0.76	1087793	England	Manchester Utd	0
+1876	Aaron Wan-Bissaka	John Davis	1984-10-03	4	2	Defender	19	4	205	95	t	0.7000000000000001	972266	England	Leicester City	1
+1877	Wanya Marçal	John Jones	1996-07-24	5	0	Midfielder	8	10	207	92	t	0.79	939465	Portugal	Tottenham	10
+1878	Joel Ward	Noah Martinez	2005-07-31	3	0	Defender	36	6	174	94	t	0.79	1364667	England	Aston Villa	3
+1879	James Ward-Prowse	Liam Rodriguez	1990-05-14	5	0	Midfielder	16	3	201	67	t	0.79	2347591	England	Crystal Palace	7
+1880	Lewis Warrington	Noah Martinez	1985-08-26	4	0	Midfielder	24	5	196	61	t	0.79	307585	England	Brentford	6
+1881	Ollie Watkins	James Garcia	2002-11-13	4	0	Forward	4	0	177	65	t	0.78	545543	England	Southampton	43
+1882	Noah Watson	John Miller	2004-10-21	5	0	Defender	36	4	200	97	t	0.7000000000000001	216203	England	Southampton	1
+1883	Kelland Watts	Sophia Miller	2005-03-03	5	0	Defender	15	9	208	91	t	0.76	420214	England	Leeds United	1
+1884	Adam Webster	Alex Martinez	1986-10-17	3	0	Defender	23	3	187	64	t	0.71	1799326	England	Brighton	6
+1885	Wout Weghorst	Liam Brown	1987-02-03	1	2	Forward	11	1	190	78	t	0.78	913099	Netherlands	Bournemouth	28
+1893	Charlie Whitaker	James Garcia	2000-11-04	3	0	Midfielder	39	5	185	60	t	0.8	1988927	England	Manchester City	8
+973	Tosin Adarabioyo	James Miller	1992-09-21	2	0	Defender	40	3	201	59	t	0.79	1151412	England	Everton	8
+974	Tayo Adaramola	Maria Rodriguez	1999-09-20	5	0	Defender	28	10	193	76	t	0.76	265174	Ireland	West Ham	3
+975	Joshua Addae	Michael Miller	1995-11-04	4	0	Defender	33	2	195	98	t	0.7000000000000001	2763551	England	Aston Villa	6
+976	Simon Adingra	Emma Garcia	1994-07-05	5	0	Forward	3	1	190	87	t	0.77	1345862	Cote D’Ivoire	Brighton	30
+977	Adler Nascimento	Maria Martinez	1992-05-09	5	0	Forward	17	3	201	78	t	0.78	1340949	Portugal	Crystal Palace	49
+978	Daniel Adu-Adjei	Maria Martinez	2001-02-04	5	0	Midfielder	30	10	170	93	t	0.75	746135	England	Tottenham	8
+979	Nayef Aguerd	James Davis	2001-01-07	2	0	Defender	23	2	187	94	t	0.78	1700910	Morocco	Brentford	6
+980	Brandon Aguilera	Liam Martinez	2003-01-21	5	0	Midfielder	13	8	186	59	t	0.74	1850897	Costa Rica	Wolves	4
+981	Naouirou Ahamada	Michael Rodriguez	1984-04-06	5	0	Midfielder	15	8	170	71	t	0.78	2097840	France	Liverpool	0
+982	Rayan Aït-Nouri	Michael Davis	1995-07-21	0	0	Defender	24	0	185	90	t	0.7000000000000001	831633	Algeria	Brighton	10
+983	Kristoffer Ajer	James Williams	2000-06-30	3	0	Defender	7	2	176	54	t	0.72	875157	Norway	Southampton	3
+984	Manuel Akanji	Liam Johnson	1987-09-23	3	0	Defender	29	1	190	87	t	0.8	823100	Switzerland	Brentford	4
+985	Nathan Aké	John Johnson	2005-08-28	0	0	Defender	18	10	207	59	t	0.77	1441826	Netherlands	West Ham	7
+986	Victor Akinwale	Noah Brown	1989-10-10	0	1	Forward	9	9	175	64	t	0.7000000000000001	1495663	England	Crystal Palace	42
+987	Marc Albrighton	Noah Williams	2004-06-01	1	1	Midfielder	29	6	203	59	t	0.75	2252350	England	Liverpool	1
+988	Thiago Alcântara	John Rodriguez	1986-12-30	4	0	Midfielder	40	4	209	91	t	0.72	831778	Spain	Crystal Palace	4
+989	Carlos Alcaraz	Emma Garcia	2005-12-29	3	1	Midfielder	21	9	205	78	t	0.76	2504839	Argentina	Manchester City	5
+990	Ryan Alebiosu	Noah Jones	1984-09-11	0	0	Defender	33	6	206	75	t	0.8	2184055	England	West Ham	6
+1158	Bobby Clark	Alex Smith	2002-08-01	4	1	Midfielder	27	7	171	85	t	0.72	2923309	England	Leeds United	8
+1428	Kenedy	John Smith	1985-01-08	1	0	Midfielder	17	7	180	57	t	0.79	309659	Brazil	Manchester Utd	7
+1611	Mark Noble	Noah Miller	1995-02-23	5	0	Midfielder	7	7	204	64	t	0.79	1089183	England	Bournemouth	6
+1866	Jannik Vestergaard	James Martinez	1991-02-28	5	0	Defender	3	6	210	89	t	0.7000000000000001	1514561	Denmark	Brighton	6
+1867	Matthew Vigor	Sophia Brown	2004-12-10	1	0	Midfielder	9	9	199	95	t	0.78	175004	England	Tottenham	4
+1868	Matías Viña	Liam Garcia	1998-12-22	1	0	Defender	22	10	176	83	t	0.8	1034334	Uruguay	Aston Villa	8
+1869	Nikola Vlasic	Maria Davis	1994-12-02	1	0	Midfielder	12	4	191	66	t	0.77	1621381	Croatia	Wolves	8
+1870	Jake Vokins	Noah Smith	2002-06-07	3	0	Defender	15	5	171	57	t	0.77	2122755	England	Newcastle Utd	3
+1871	Jack Wadham	John Williams	1997-06-19	4	0	Midfielder	4	10	203	62	t	0.79	1007742	England	Arsenal	7
+1872	Theo Walcott	Sophia Davis	1991-09-13	0	0	Forward	1	5	205	77	t	0.75	2721188	England	Southampton	46
+1894	Ben White	James Johnson	2001-09-16	0	0	Defender	30	7	207	97	t	0.78	1686366	England	Bournemouth	3
+1895	Dylan Williams	Sophia Jones	1990-08-22	4	2	Defender	38	2	175	90	t	0.71	2105041	England	Aston Villa	10
+1897	Joe Willock	John Johnson	2002-06-23	3	2	Midfielder	3	0	186	70	t	0.76	2933637	England	Brentford	1
+1898	Harry Wilson	James Smith	2004-04-14	2	2	Midfielder	24	7	209	93	t	0.8	2240157	Wales	Chelsea	6
+1899	Thomas Wilson-Brown	Maria Brown	2002-12-20	4	0	Defender	8	2	196	54	t	0.76	726039	England	Southampton	10
+1900	Josh Wilson-Esbrand	Sophia Jones	1986-10-11	3	0	Defender	26	9	173	89	t	0.77	1078060	England	Wolves	3
+1901	Harry Winks	James Johnson	2001-03-31	3	0	Midfielder	38	0	173	87	t	0.73	2095904	England	Manchester Utd	7
+1902	Yoane Wissa	Liam Williams	1994-11-30	3	0	Midfielder	35	10	210	97	t	0.73	1146349	DR Congo	Liverpool	8
+1903	Maximilian Wöber	James Martinez	2001-03-29	3	0	Defender	15	9	204	71	t	0.73	1156304	Austria	Liverpool	1
+1904	Max Woltman	Alex Garcia	1991-08-02	3	0	Forward	35	1	175	93	t	0.76	608489	England	Brighton	45
+1905	Chris Wood	Liam Johnson	1986-10-29	3	0	Forward	10	9	210	95	t	0.72	657027	New Zealand	Brighton	22
+1906	Ben Woodburn	Liam Rodriguez	1993-03-02	2	0	Midfielder	27	0	186	93	t	0.76	2263403	Wales	Tottenham	5
+1907	Joe Wormleighton	Maria Miller	1984-10-11	1	0	Defender	19	9	187	81	t	0.75	104853	England	Brentford	1
+1908	Joe Worrall	Michael Davis	1994-04-01	3	0	Defender	23	4	205	55	t	0.72	525793	England	Manchester City	1
+1909	Xande Silva	Emma Brown	1986-09-18	2	0	Forward	10	5	186	54	t	0.71	836729	Portugal	West Ham	32
+1910	Granit Xhaka	Sophia Martinez	1996-11-11	1	2	Midfielder	10	4	188	58	t	0.75	2059441	Switzerland	Newcastle Utd	9
+1911	Yago Santiago	Michael Davis	2000-03-18	2	0	Forward	35	3	187	57	t	0.77	2843090	Spain	Tottenham	36
+1912	Yan Couto	Sophia Martinez	1993-01-06	1	1	Defender	37	4	188	89	t	0.73	2109076	Brazil	Everton	5
+1913	Andrii Yarmolenko	Noah Miller	2001-09-11	2	0	Forward	4	8	189	75	t	0.74	2314809	Ukraine	Chelsea	44
+1914	Yehor Yarmoliuk	Olivia Johnson	1996-02-28	5	0	Midfielder	20	1	201	82	t	0.77	2361052	Ukraine	Aston Villa	7
+1915	Yegor Yarmolyuk	Olivia Smith	1988-04-07	0	0	Midfielder	27	6	171	82	t	0.73	2645269	Ukraine	Wolves	8
+1916	Ryan Yates	Liam Garcia	1994-04-06	3	0	Midfielder	6	1	183	75	t	0.77	1613360	England	Aston Villa	3
+1917	Ashley Young	Maria Williams	2001-11-11	1	0	Defender	32	5	179	95	t	0.78	2903393	England	Southampton	3
+1918	Nathan Young-Coombes	Liam Brown	2000-06-22	5	0	Forward	26	7	179	70	t	0.7000000000000001	2960833	England	Manchester City	35
+1919	Illia Zabarnyi	Alex Davis	2002-09-24	4	0	Defender	32	6	198	63	t	0.75	461210	Ukraine	Southampton	4
+1920	Wilfried Zaha	Sophia Martinez	1990-08-02	1	0	Forward	18	9	184	82	t	0.73	1187789	Cote D’Ivoire	Fulham	33
+1921	Denis Zakaria	Olivia Martinez	1990-05-11	5	2	Midfielder	7	1	208	75	t	0.75	2349247	Switzerland	Arsenal	3
+1922	André-Frank Zambo Anguissa	Noah Johnson	1997-04-06	1	1	Midfielder	13	7	208	65	t	0.8	798972	Cameroon	West Ham	6
+1923	Jan Zamburek	Emma Johnson	1991-12-18	2	1	Midfielder	27	10	190	68	t	0.7000000000000001	1595633	Czech Republic	Bournemouth	8
+1924	Zanka	Liam Rodriguez	1987-06-20	3	0	Defender	9	2	184	88	t	0.79	368256	Denmark	Fulham	6
+1925	Jordan Zemura	Noah Davis	1985-02-14	3	0	Defender	33	9	185	83	t	0.7000000000000001	2300054	Zimbabwe	Aston Villa	3
+1926	Andi Zeqiri	Olivia Davis	2002-04-27	5	0	Forward	11	2	170	78	t	0.76	2670410	Switzerland	Leicester City	49
+1927	Zidane Iqbal	Alex Miller	1996-01-01	1	1	Midfielder	2	9	206	54	t	0.7000000000000001	2009097	Iraq	Crystal Palace	5
+1928	Oleksandr Zinchenko	Liam Brown	2004-01-18	4	0	Defender	23	5	196	67	t	0.76	2791133	Ukraine	Leeds United	6
+1929	Hakim Ziyech	James Martinez	1994-04-08	0	0	Midfielder	27	7	182	87	t	0.8	1680236	Morocco	Manchester City	2
+1930	Kurt Zouma	Michael Rodriguez	1990-02-13	1	0	Defender	9	9	187	91	t	0.74	1068611	France	Arsenal	0
+1931	Martin Ødegaard	Maria Jones	1999-06-21	1	0	Midfielder	37	6	186	85	t	0.73	771969	Norway	Manchester City	3
+1932	Leo Østigård	Emma Johnson	1991-06-24	2	0	Defender	21	10	183	85	t	0.72	1245237	Norway	Newcastle Utd	4
+1477	Jefferson Lerma	John Johnson	1992-03-29	3	0	Midfielder	13	7	206	79	t	0.71	1608906	Colombia	Tottenham	10
+1478	Thakgalo Leshabela	John Brown	1986-04-02	2	0	Midfielder	20	2	193	87	t	0.8	312221	South Africa	Chelsea	4
+1479	Rico Lewis	Emma Miller	2005-12-17	5	0	Defender	37	6	202	98	t	0.8	880777	England	Fulham	0
+1480	Lewis Miley	Liam Rodriguez	1985-11-29	1	1	Midfielder	34	7	195	57	t	0.71	1835073	England	Nott'ham Forest	5
+1481	Keane Lewis-Potter	Emma Johnson	1984-12-10	5	0	Forward	22	9	206	82	t	0.71	1945472	England	Brighton	33
+1482	Myles Lewis-Skelly	Olivia Martinez	1997-12-08	1	0	Midfielder	33	7	205	55	t	0.79	109180	England	Brentford	8
+1483	Victor Lindelöf	Emma Smith	1996-12-25	5	0	Defender	29	7	176	57	t	0.75	1077569	Sweden	Fulham	6
+1484	Hayden Lindley	Liam Brown	2004-08-29	5	0	Midfielder	5	2	207	70	t	0.79	2485546	England	Liverpool	3
+1485	Jesse Lingard	Emma Garcia	1992-02-08	1	0	Midfielder	36	10	190	85	t	0.72	1374925	England	Tottenham	8
+1486	Tino Livramento	Noah Rodriguez	1997-12-18	3	0	Defender	29	0	188	60	t	0.71	1001391	England	Crystal Palace	8
+1487	Diego Llorente	Alex Garcia	1987-01-05	0	2	Defender	6	2	208	61	t	0.7000000000000001	1099387	Spain	Nott'ham Forest	8
+1488	Giovani Lo Celso	John Miller	1987-04-24	2	0	Midfielder	21	1	197	85	t	0.74	2486697	Argentina	Southampton	4
+1489	Jürgen Locadia	Michael Martinez	1993-10-09	4	0	Forward	33	6	180	97	t	0.77	2602704	Netherlands	Newcastle Utd	43
+1490	Ruben Loftus-Cheek	Noah Johnson	1984-07-16	0	0	Midfielder	11	9	188	81	t	0.77	83370	England	Southampton	5
+1491	Joe Lolley	Michael Rodriguez	1985-11-24	2	0	Forward	8	9	196	69	t	0.73	2510690	England	Leicester City	20
+1492	Shane Long	Noah Smith	2004-01-02	4	1	Forward	21	9	196	78	t	0.8	1431476	Ireland	Leicester City	45
+1493	Emmanuel Longelo	John Brown	1995-10-17	1	1	Defender	14	1	201	82	t	0.71	2450205	England	Crystal Palace	8
+1494	Sean Longstaff	Olivia Rodriguez	2002-11-15	3	0	Midfielder	28	5	196	95	t	0.73	2234838	England	Brighton	7
+1495	Ademola Lookman	John Jones	2001-01-19	0	0	Forward	10	8	195	83	t	0.71	1492235	Nigeria	Leeds United	30
+1496	Jamal Lowe	Emma Garcia	2000-02-15	0	0	Forward	26	1	209	58	t	0.78	2677449	Jamaica	Nott'ham Forest	34
+1497	Lucas Moura	Alex Jones	1984-01-30	4	0	Forward	3	5	171	63	t	0.78	585990	Brazil	Crystal Palace	34
+1498	Lucas Paquetá	Sophia Smith	2005-06-22	5	0	Midfielder	22	1	189	99	t	0.78	2578688	Brazil	Leeds United	9
+1627	Sheyi Ojo	Alex Johnson	1996-06-22	0	0	Forward	20	9	192	90	t	0.73	1915437	England	Wolves	34
+1886	Jensen Weir	Noah Williams	1989-09-02	1	0	Midfielder	34	10	169	68	t	0.79	1919691	England	Brentford	4
+1887	Danny Welbeck	John Garcia	1986-07-24	0	0	Forward	40	6	170	67	t	0.76	1589048	England	Arsenal	33
+1888	Reece Welch	Emma Johnson	1994-06-12	5	0	Defender	28	8	182	63	t	0.74	2468475	England	Crystal Palace	4
+1889	Charlie Wellens	Maria Martinez	1989-11-14	4	2	Midfielder	9	5	184	96	t	0.71	200137	England	Fulham	9
+1890	Jack Wells-Morrison	John Jones	1993-03-07	2	0	Midfielder	37	5	188	76	t	0.79	2791513	England	Liverpool	6
+1891	Timo Werner	Olivia Martinez	1993-06-15	5	0	Forward	3	8	186	93	t	0.8	1703782	Germany	West Ham	25
+1892	Wesley	John Davis	1991-05-17	2	0	Forward	11	3	194	71	t	0.76	1100810	Brazil	Liverpool	26
+\.
+
+
+--
+-- Data for Name: staff; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.staff (s_id, s_name, s_team, s_citizenof, s_salary, s_role) FROM stdin;
+1	Gloria Brooks	Wolves	Northern Ireland	47067794.301574826	manager
+2	Donna Hampton	Wolves	Uzbekistan	7109230.491820816	assistant manager
+3	Melanie Lamey	Wolves	Gabon	\N	owner
+4	Terrence Amato	Wolves	Greece	488358.0309612551	trainer
+5	Corey Coren	Wolves	England	431222.4746651931	trainer
+6	Holly Mitton	Everton	Guyana	18048624.48430714	manager
+7	Pearl Kirkland	Everton	Ireland	6828357.99485418	assistant manager
+8	Christin Alford	Everton	Tanzania	\N	owner
+9	Patrick Olivo	Everton	Czech Republic	167944.25063881313	trainer
+10	Bobby Decinti	Everton	Serbia	253712.21537775546	trainer
+11	Cherry Mahan	West Ham	Slovenia	21513206.375947475	manager
+12	Amy Bond	West Ham	Cote D’Ivoire	7609108.617081208	assistant manager
+13	Lynn Martinez	West Ham	DR Congo	\N	owner
+14	Karyn Sagen	West Ham	Belgium	318008.00511134363	trainer
+15	Irene Barth	West Ham	Guinea	115993.09860209345	trainer
+16	Nicole Crandall	Tottenham	Malaysia	10204783.477052141	manager
+17	Tiffiny Jackson	Tottenham	Montserrat	9332797.93616968	assistant manager
+18	Elaine Wood	Tottenham	Turkey	\N	owner
+19	Marcy Ramseur	Tottenham	Scotland	257078.94094518214	trainer
+20	Bryant Ruble	Tottenham	Nicaragua	357260.3785308381	trainer
+21	William Weaver	Nott'ham Forest	Kenya	17618624.49520155	manager
+22	Steven Hall	Nott'ham Forest	Saudi Arabia	6945243.579552302	assistant manager
+23	Michael Cain	Nott'ham Forest	Angola	\N	owner
+24	Kevin Linder	Nott'ham Forest	Angola	108097.21000089157	trainer
+25	Samatha Rodriquez	Nott'ham Forest	Russia	108166.39195147697	trainer
+26	William Osteen	Aston Villa	China	35462756.42519513	manager
+27	Rosetta Geiger	Aston Villa	Zimbabwe	6704781.504183039	assistant manager
+28	Donald Taylor	Aston Villa	Nicaragua	\N	owner
+29	William Bowman	Aston Villa	Angola	409597.64376545843	trainer
+30	Shannon Brigance	Aston Villa	Vietnam	341323.6298758437	trainer
+31	Lula Holman	Manchester City	Israel	28220562.49699921	manager
+32	Roger Stultz	Manchester City	Algeria	6179244.675317466	assistant manager
+33	Richard Mayer	Manchester City	Burkina Faso	\N	owner
+34	Stephen Fagan	Manchester City	Norway	513446.15456771496	trainer
+35	David Hakes	Manchester City	Russia	126699.91703335845	trainer
+36	John Becker	Manchester Utd	Paraguay	43198112.049148455	manager
+37	Lori Twitt	Manchester Utd	Lithuania	5269789.778885761	assistant manager
+38	Winnie Fadel	Manchester Utd	Japan	\N	owner
+39	Mary Whitson	Manchester Utd	Wales	188899.28515354876	trainer
+40	Betty Smith	Manchester Utd	Iran	207796.60767929972	trainer
+41	Terry Ward	Fulham	Indonesia	16125234.247642014	manager
+42	Thomas Deguire	Fulham	Sierra Leone	6162582.493888606	assistant manager
+43	Jamie Tunnell	Fulham	Slovenia	\N	owner
+44	Daniel Christenson	Fulham	Jordan	107882.0776839595	trainer
+45	Joni Wright	Fulham	Romania	205189.60480199748	trainer
+46	William Calhoun	Newcastle Utd		36627173.46358012	manager
+47	Joseph Dawes	Newcastle Utd	Slovenia	6449353.084038072	assistant manager
+48	Nicole Amick	Newcastle Utd	Algeria	\N	owner
+49	Jeffrey Woodard	Newcastle Utd	Romania	224503.48472877324	trainer
+50	Ruben Delgado	Newcastle Utd	Turkey	515114.2718478792	trainer
+51	Ronnie Grant	Brentford	Netherlands	35187042.54271819	manager
+52	Thomas Hale	Brentford	Serbia	7361974.254623296	assistant manager
+53	Christopher Kamuda	Brentford	Senegal	\N	owner
+54	Matthew Zanchez	Brentford	Poland	528992.7982580396	trainer
+55	Lynn Luce	Brentford	Austria	209806.3861502998	trainer
+56	Julie Durham	Liverpool	Indonesia	27631668.84214069	manager
+57	Mary Boyer	Liverpool	Thailand	9256638.40682921	assistant manager
+58	Scott Harper	Liverpool	Papua New Guinea	\N	owner
+59	Brenda Couto	Liverpool	Ireland	341541.44712482905	trainer
+60	Jeffrey Numbers	Liverpool	Romania	321229.4583446954	trainer
+61	Heidi Phillips	Leicester City	Thailand	17088009.78540793	manager
+62	Melissa Jones	Leicester City	Hungary	9769651.012000665	assistant manager
+63	Tom Hook	Leicester City	Fiji	\N	owner
+64	Ester Pefferkorn	Leicester City	Papua New Guinea	164316.31987532353	trainer
+65	Robert Scoggins	Leicester City	Gabon	520950.2372730732	trainer
+66	Tina Shannon	Arsenal	Latvia	48098814.94663954	manager
+67	Nathan Belcher	Arsenal	Uzbekistan	9108536.102367043	assistant manager
+68	Rena Clemmons	Arsenal	Iceland	\N	owner
+69	Anthony Reid	Arsenal	Papua New Guinea	295364.22639850073	trainer
+70	Jennifer Patterson	Arsenal	South Korea	266138.01737634186	trainer
+71	Candice Perun	Crystal Palace	England	23218703.197449207	manager
+72	Dennis Bridges	Crystal Palace	Uzbekistan	6614792.417913249	assistant manager
+73	Coleman Valsin	Crystal Palace	Turkey	\N	owner
+74	Marie Nissen	Crystal Palace	Bosnia & Herzegovina	415358.1930561571	trainer
+75	Andrew Childs	Crystal Palace	Luxembourg	464123.5231142823	trainer
+76	Angela Foster	Leeds United	Hungary	14973199.495089054	manager
+77	Barbara Kyle	Leeds United	Northern Ireland	5862091.116985261	assistant manager
+78	Ricky Yaeger	Leeds United	United Arab Emirates	\N	owner
+79	Stacey Plummer	Leeds United	Zambia	131223.58595181417	trainer
+80	Constance John	Leeds United	Romania	203025.32318348662	trainer
+81	Robert Bartelt	Brighton	Portugal	13472683.893884253	manager
+82	Clyde Ross	Brighton	Croatia	6595583.806182293	assistant manager
+83	Judith Morgan	Brighton	Czech Republic	\N	owner
+84	Frances Simon	Brighton	Ecuador	118288.3249486203	trainer
+85	Robert Smith	Brighton	Algeria	516607.63143887144	trainer
+86	Kimberley Schroeder	Southampton	Japan	33072440.789911628	manager
+87	Deanna Pocai	Southampton	Burkina Faso	5497070.961059427	assistant manager
+88	John Costa	Southampton	Egypt	\N	owner
+89	Larry Nicholson	Southampton	Zimbabwe	144563.9812434045	trainer
+90	Mark Eiselein	Southampton	Australia	213262.72296577244	trainer
+91	Ana Linquist	Chelsea	Iceland	41826175.18007146	manager
+92	David Potts	Chelsea	Angola	7609672.65903995	assistant manager
+93	Elizabeth Tolle	Chelsea	Lithuania	\N	owner
+94	Wilburn Frazer	Chelsea	Cote D’Ivoire	244803.98690143577	trainer
+95	Jean Downs	Chelsea	Romania	473052.3265371548	trainer
+96	Leroy Smith	Bournemouth	Lithuania	40198638.02617821	manager
+97	John Rasmussen	Bournemouth	England	5687248.628705525	assistant manager
+98	Leonard Lundquist	Bournemouth	Algeria	\N	owner
+99	Miles Ermitanio	Bournemouth	Thailand	329083.3253298053	trainer
+100	Adele Ochoa	Bournemouth	Greece	242669.22546119863	trainer
+\.
+
+
+--
+-- Data for Name: team; Type: TABLE DATA; Schema: public; Owner: ben
+--
+
+COPY public.team (t_name, t_transferbudget, t_passes, t_goalsconceded, t_goalsscored, t_league, t_possesion) FROM stdin;
+Wolves	285403084	54985	617	757	Premier League	0.37
+Everton	219721057	97196	605	581	Premier League	0.51
+West Ham	245282585	19764	512	443	Premier League	0.85
+Tottenham	50770718	28258	727	517	Premier League	0.76
+Nott'ham Forest	89364003	12411	749	426	Premier League	0.8300000000000001
+Aston Villa	195514051	56173	606	596	Premier League	0.32
+Manchester City	262516690	55746	403	603	Premier League	0.87
+Manchester Utd	210186505	22492	596	461	Premier League	0.4
+Fulham	207030284	51206	710	669	Premier League	0.87
+Newcastle Utd	74717379	41646	652	442	Premier League	0.6
+Brentford	79932489	75786	572	632	Premier League	0.68
+Liverpool	111800980	84793	613	498	Premier League	0.62
+Leicester City	123308230	19270	783	580	Premier League	0.43
+Arsenal	360295138	23848	658	532	Premier League	0.86
+Crystal Palace	287487570	30860	526	419	Premier League	0.78
+Leeds United	260426647	96199	431	427	Premier League	0.35000000000000003
+Brighton	315959408	23578	614	769	Premier League	0.05
+Southampton	174220153	97836	626	730	Premier League	0.8300000000000001
+Chelsea	314991650	54666	549	697	Premier League	0.88
+Bournemouth	68290345	65630	546	585	Premier League	0.08
+\.
+
+
+--
+-- Name: keeper_k_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
+--
+
+SELECT pg_catalog.setval('public.keeper_k_id_seq', 256, true);
+
+
+--
+-- Name: matches_m_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
+--
+
+SELECT pg_catalog.setval('public.matches_m_id_seq', 380, true);
+
+
+--
+-- Name: player_p_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
+--
+
+SELECT pg_catalog.setval('public.player_p_id_seq', 1932, true);
+
+
+--
+-- Name: staff_s_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ben
+--
+
+SELECT pg_catalog.setval('public.staff_s_id_seq', 100, true);
+
+
+--
+-- Name: country country_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (c_name);
+
+
+--
+-- Name: keeper keeper_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.keeper
+    ADD CONSTRAINT keeper_pkey PRIMARY KEY (k_id);
+
+
+--
+-- Name: league league_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.league
+    ADD CONSTRAINT league_pkey PRIMARY KEY (l_name);
+
+
+--
+-- Name: matches matches_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.matches
+    ADD CONSTRAINT matches_pkey PRIMARY KEY (m_id);
+
+
+--
+-- Name: player player_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.player
+    ADD CONSTRAINT player_pkey PRIMARY KEY (p_id);
+
+
+--
+-- Name: staff staff_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_pkey PRIMARY KEY (s_id);
+
+
+--
+-- Name: team team_pkey; Type: CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.team
+    ADD CONSTRAINT team_pkey PRIMARY KEY (t_name);
+
+
+--
+-- Name: keeper keeper_k_citizenof_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.keeper
+    ADD CONSTRAINT keeper_k_citizenof_fkey FOREIGN KEY (k_citizenof) REFERENCES public.country(c_name);
+
+
+--
+-- Name: keeper keeper_k_team_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.keeper
+    ADD CONSTRAINT keeper_k_team_fkey FOREIGN KEY (k_team) REFERENCES public.team(t_name);
+
+
+--
+-- Name: league league_l_country_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.league
+    ADD CONSTRAINT league_l_country_fkey FOREIGN KEY (l_country) REFERENCES public.country(c_name);
+
+
+--
+-- Name: matches matches_m_awayteam_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.matches
+    ADD CONSTRAINT matches_m_awayteam_fkey FOREIGN KEY (m_awayteam) REFERENCES public.team(t_name);
+
+
+--
+-- Name: matches matches_m_hometeam_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.matches
+    ADD CONSTRAINT matches_m_hometeam_fkey FOREIGN KEY (m_hometeam) REFERENCES public.team(t_name);
+
+
+--
+-- Name: matches matches_m_league_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.matches
+    ADD CONSTRAINT matches_m_league_fkey FOREIGN KEY (m_league) REFERENCES public.league(l_name);
+
+
+--
+-- Name: player player_p_citizenof_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.player
+    ADD CONSTRAINT player_p_citizenof_fkey FOREIGN KEY (p_citizenof) REFERENCES public.country(c_name);
+
+
+--
+-- Name: player player_p_team_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.player
+    ADD CONSTRAINT player_p_team_fkey FOREIGN KEY (p_team) REFERENCES public.team(t_name);
+
+
+--
+-- Name: staff staff_s_citizenof_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_s_citizenof_fkey FOREIGN KEY (s_citizenof) REFERENCES public.country(c_name);
+
+
+--
+-- Name: staff staff_s_team_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_s_team_fkey FOREIGN KEY (s_team) REFERENCES public.team(t_name);
+
+
+--
+-- Name: team team_t_league_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ben
+--
+
+ALTER TABLE ONLY public.team
+    ADD CONSTRAINT team_t_league_fkey FOREIGN KEY (t_league) REFERENCES public.league(l_name);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
